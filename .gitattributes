@@ -1,0 +1,16 @@
+*                       text        eol=lf
+
+*.config                text        eol=lf
+*.cs                    text        eol=lf
+*.csproj                text        eol=lf
+*.json                  text        eol=lf
+*.md                    text        eol=lf
+*.props                 text        eol=lf
+*.resx                  text        eol=lf
+*.sln                   text        eol=crlf
+*.sln.DotSettings       text        eol=lf
+*.targets               text        eol=lf
+*.yml                   text        eol=lf
+
+*.ico                   binary
+*.snk                   binary

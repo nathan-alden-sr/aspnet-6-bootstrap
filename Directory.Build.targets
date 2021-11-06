@@ -1,0 +1,23 @@
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory)build\msbuild\DotNetVersionHelper.targets" />
+
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);NU5105</NoWarn>
+  </PropertyGroup>
+
+  <!-- Versioning -->
+
+  <Target Name="Version" BeforeTargets="BeforeCompile;GenerateNuspec">
+    <DotNetVersionHelper
+      VersionPrefix="$(VersionPrefix)"
+      VersionSuffix="$(VersionSuffix)"
+      BuildNumber="$(BUILD_BUILDNUMBER)"
+      GitCommitHash="$(BUILD_SOURCEVERSION)"
+      PullRequestId="$(SYSTEM_PULLREQUEST_PULLREQUESTNUMBER)">
+      <Output TaskParameter="PackageVersion" PropertyName="PackageVersion" />
+      <Output TaskParameter="AssemblyVersion" PropertyName="AssemblyVersion" />
+      <Output TaskParameter="FileVersion" PropertyName="FileVersion" />
+      <Output TaskParameter="InformationalVersion" PropertyName="InformationalVersion" />
+    </DotNetVersionHelper>
+  </Target>
+</Project>

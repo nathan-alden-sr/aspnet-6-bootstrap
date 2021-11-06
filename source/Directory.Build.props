@@ -1,0 +1,11 @@
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
+
+  <ItemGroup>
+    <PackageReference Include="TerraFX" IsImplicitlyDefined="true" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <PackageReference Include="DotNet.ReproducibleBuilds" IsImplicitlyDefined="true" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

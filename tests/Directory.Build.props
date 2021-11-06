@@ -1,0 +1,16 @@
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" IsImplicitlyDefined="true" PrivateAssets="all" />
+    <PackageReference Include="FluentAssertions" IsImplicitlyDefined="true" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" IsImplicitlyDefined="true" PrivateAssets="all" />
+    <PackageReference Include="Moq" IsImplicitlyDefined="true" PrivateAssets="all" />
+    <PackageReference Include="xunit" IsImplicitlyDefined="true" PrivateAssets="all" />
+    <PackageReference Include="xunit.runner.visualstudio" IsImplicitlyDefined="true" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

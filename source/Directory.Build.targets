@@ -1,0 +1,11 @@
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.targets" />
+
+  <ItemGroup>
+    <PackageReference Update="TerraFX" Version="0.1.0-alpha.1393092126" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <PackageReference Update="DotNet.ReproducibleBuilds" Version="0.1.66" />
+  </ItemGroup>
+</Project>

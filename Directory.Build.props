@@ -1,0 +1,67 @@
+<Project>
+  <!-- Repository -->
+
+  <PropertyGroup>
+    <RepositoryRootUrl>https://github.com/company/product</RepositoryRootUrl>
+    <RepositoryUrl>$(RepositoryRootUrl).git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <!-- Versioning -->
+
+  <PropertyGroup>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix>alpha</VersionSuffix>
+  </PropertyGroup>
+
+  <!-- Directories -->
+
+  <PropertyGroup>
+    <BaseArtifactsPath>$(MSBuildThisFileDirectory)artifacts\</BaseArtifactsPath>
+    <BaseArtifactsPathSuffix>$(ProjectCategory)\$(MSBuildProjectName)</BaseArtifactsPathSuffix>
+    <BaseOutputPath>$(BaseArtifactsPath)bin\$(BaseArtifactsPathSuffix)\</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(BaseArtifactsPath)obj\$(BaseArtifactsPathSuffix)\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+
+  <!-- Packages -->
+
+  <PropertyGroup>
+    <Company>Company</Company>
+    <Product>Product</Product>
+    <Title>$(AssemblyName)</Title>
+    <Authors>Company</Authors>
+    <Copyright>Copyright (c) Company.</Copyright>
+  </PropertyGroup>
+
+  <!-- Miscellaneous -->
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Features>strict</Features>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
+    <MinClientVersion>4.3</MinClientVersion>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <OverwriteReadOnlyFiles>true</OverwriteReadOnlyFiles>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <UseSharedCompilation>true</UseSharedCompilation>
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <!-- Debug-only -->
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DebugType>full</DebugType>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <!-- Global usings -->
+
+  <ItemGroup>
+    <Using Include="System.Collections.Immutable" />
+    <Using Include="TerraFX.Utilities.AssertionUtilities" Static="true" />
+    <Using Include="TerraFX.Utilities.ExceptionUtilities" Static="true" />
+  </ItemGroup>
+</Project>

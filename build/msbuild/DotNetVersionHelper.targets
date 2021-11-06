@@ -1,0 +1,197 @@
+<Project>
+	<!--
+    An MSBuild helper task that versions .NET assemblies.
+
+    Based on the versioning scheme used by Microsoft for .NET-related .NET assemblies.
+    https://github.com/dotnet/arcade/blob/main/src/Microsoft.DotNet.Arcade.Sdk/src/CalculateAssemblyAndFileVersions.cs
+  -->
+	<UsingTask TaskName="DotNetVersionHelper" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		<ParameterGroup>
+			<!-- 
+        The canonical version prefix. This prefix should follow Semantic Versioning 2.0.0 and must always
+        use exactly three components.
+        https://semver.org/
+      -->
+			<VersionPrefix ParameterType="System.String" Required="true" Output="true" />
+
+			<!--
+        The canonical version suffix. This suffix is used in PE binary product version strings and as the
+        prerelease identifier for NuGet packages.
+      -->
+			<VersionSuffix ParameterType="System.String" Required="false" Output="true" />
+
+			<!--
+        The version used for NuGet packages. The caller should not provide a value for this parameter as it
+        will be overwritten.
+      -->
+			<PackageVersion ParameterType="System.String" Required="false" Output="true" />
+
+			<!--
+        Provided by Azure Pipelines. Expected to be in the format "yyyyMMdd.r".
+      -->
+			<BuildNumber ParameterType="System.String" Required="false" />
+
+			<!--
+        The commit hash of the commit downloaded for the build.
+      -->
+			<GitCommitHash ParameterType="System.String" Required="false" />
+
+			<!-- 
+        The ID of the pull request the branch is associated with, if applicable.
+      -->
+			<PullRequestId ParameterType="System.String" Required="false" />
+
+			<!-- 
+        Disable automatically appending source revision ID.
+      -->
+			<IncludeSourceRevisionInInformationalVersion ParameterType="System.Boolean" Required="false">false</IncludeSourceRevisionInInformationalVersion>
+
+			<!-- 
+        Contains the calculated assembly version after task execution.
+      -->
+			<AssemblyVersion ParameterType="System.String" Output="true" />
+
+			<!-- 
+        Contains the calculated file version after task execution.
+      -->
+			<FileVersion ParameterType="System.String" Output="true" />
+
+			<!-- 
+        Contains the calculated informational version after task execution.
+      -->
+			<InformationalVersion ParameterType="System.String" Output="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System" />
+			<Using Namespace="System.Globalization" />
+			<Using Namespace="System.Text.RegularExpressions" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+if (!Version.TryParse(VersionPrefix, out Version versionPrefix) ||
+    versionPrefix.Major == -1 ||
+    versionPrefix.Minor == -1 ||
+    versionPrefix.Build == -1 ||
+    versionPrefix.Revision != -1)
+{
+    Log.LogError("VersionPrefix does not consist of exactly three version components.");
+    return false;
+}
+
+Log.LogMessage(MessageImportance.Low, $"Version prefix is {versionPrefix}");
+
+/*
+ * Modifies the version suffix to include pull request ID, if available.
+ */
+
+if (!string.IsNullOrWhiteSpace(PullRequestId))
+{
+    VersionSuffix = $"{VersionSuffix}{(!string.IsNullOrWhiteSpace(VersionSuffix) ? "-" : "")}pr{PullRequestId}";
+}
+
+Log.LogMessage(MessageImportance.Low, $"Version suffix is {VersionSuffix}");
+
+/*
+ * Sets the package version for NuGet packages.
+ */
+
+PackageVersion=$"{VersionPrefix}{(!string.IsNullOrWhiteSpace(VersionSuffix) ? $"-{VersionSuffix}" : "")}";
+
+Log.LogMessage(MessageImportance.Low, $"Package version is {PackageVersion}");
+
+/*
+ * Sets the assembly version. Following Semantic Versioning, this version should only use major.minor
+ * (e.g., 1.2) and append .0.0 so patched assemblies that are binary-compatible do not cause assembly
+ * binding errors.
+ * https://docs.microsoft.com/en-us/dotnet/core/tools/csproj#properties-per-attribute
+ *
+ * WPF uses AssemblyVersion in its view code generation. If all four version components are not provided,
+ * WPF substitutes 65535 for the missing components. This causes runtime exceptions when WPF tries to
+ * resolve view types.
+ */
+
+AssemblyVersion = $"{versionPrefix.ToString(2)}.0.0";
+
+const int maximumRevision = 2435;
+
+/* 
+ * If BuildNumber is not provided (e.g., when a developer is compiling the solution on their local machine),
+ * BuildNumber will default to a number larger than that produced by Azure Pipelines. This ensures local
+ * FileVersion values will always be greater than FileVersion values produced by Azure Pipelines at the same
+ * moment in time.
+ */
+if (string.IsNullOrWhiteSpace(BuildNumber))
+{
+    BuildNumber = $"{DateTimeOffset.UtcNow.ToString("yyyyMMdd")}.{maximumRevision}";
+}
+
+if (!Regex.IsMatch(BuildNumber, @"^\d{8}\.\d{1,4}$"))
+{
+    Log.LogError(@"BuildNumber does not match the format ""yyyyMMdd.r"".");
+    return false;
+}
+if (!DateTimeOffset.TryParseExact(BuildNumber.Substring(0, 8), "yyyyMMdd", null, DateTimeStyles.None, out _))
+{
+    Log.LogError(@"BuildNumber date is invalid.");
+    return false;
+}
+
+Log.LogMessage(MessageImportance.Low, $"Assembly version is {AssemblyVersion}");
+
+/*
+ * Sets the file version. Restrictions around the maximum value of each component in a WinPE file version
+ * forces us to get creative with generating component values that won't cause errors during compilation.
+ */
+
+int year = int.Parse(BuildNumber.Substring(2, 2));
+int month = int.Parse(BuildNumber.Substring(4, 2));
+int day = int.Parse(BuildNumber.Substring(6, 2));
+int revision = int.Parse(BuildNumber.Substring(9));
+
+const int maximumMajor = 65534;
+const int maximumMinor = 654;
+const int maximumPatch = 9999;
+
+if (versionPrefix.Major > maximumMajor)
+{
+    Log.LogError($"VersionPrefix's major value cannot be greater than {maximumMajor}.");
+    return false;
+}
+if (versionPrefix.Minor > maximumMinor)
+{
+    Log.LogError($"VersionPrefix's minor value cannot be greater than {maximumMinor}.");
+    return false;
+}
+if (versionPrefix.Build > maximumPatch)
+{
+    Log.LogError($"VersionPrefix's patch value cannot be greater than {maximumPatch}.");
+    return false;
+}
+if (revision > maximumRevision)
+{
+    Log.LogError($"Revision is greater than {maximumRevision}.");
+    return false;
+}
+
+int fileMajor = versionPrefix.Major;
+int fileMinor = versionPrefix.Minor * 100 + versionPrefix.Build / 100;
+int fileBuild = (versionPrefix.Build % 100) * 100 + year;
+int fileRevision = month * 5000 + day * 100 + revision;
+
+FileVersion = $"{fileMajor}.{fileMinor}.{fileBuild}.{fileRevision}";
+
+Log.LogMessage(MessageImportance.Low, $"File version is {FileVersion}");
+
+/*
+ * Sets the informational version. Informational version is an arbitrary string.
+ * This version should use all components (e.g., 1.2.3.4567-beta-pr123+0123456789abcdef0123456789abcdef01234567)
+ * https://docs.microsoft.com/en-us/dotnet/core/tools/csproj#properties-per-attribute
+ */
+
+InformationalVersion = $"{versionPrefix}{(!string.IsNullOrWhiteSpace(VersionSuffix) ? $"-{VersionSuffix}" : "")}{(!string.IsNullOrWhiteSpace(GitCommitHash) ? $"+{GitCommitHash}" : "")}";
+
+Log.LogMessage(MessageImportance.Low, $"Informational version is {InformationalVersion}");
+]]>
+			</Code>
+		</Task>
+	</UsingTask>
+</Project>

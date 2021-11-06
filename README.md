@@ -35,6 +35,16 @@ You must do a few things before successfully running the API application:
 
 Microsoft inexplicably does not implement `IActionResult` for every HTTP status code. Additionally, developers sometimes want to implement "response body envelopes" where all response bodies follow a certain JSON schema. In this repository, response body envelopes are implemented by the `StandardJsonResult` and `StandardJsonResult<TData>` classes. A fluent API makes it easy to compose these response body envelopes. See the [`HealthController`](source/Api/Controllers/Health/HealthController.cs) class for an example.
 
+### Swashbuckle customizations
+
+Swashbuckle has some annoying behavior that I was intent on fixing.
+
+Swashbuckle does not correctly honor non-null reference types when the [nullable reference type](https://docs.microsoft.com/en-us/dotnet/csharp/nullable-references) feature is enabled. The [NullableSchemaFilter](source/Api/Swashbuckle/NullableSchemaFilter.cs) class corrects this behavior.
+
+Swashbuckle does not render generic model type names correctly. The [TitleFilter](source/Api/Swashbuckle/TitleFilter.cs) class corrects this behavior.
+
+I wrote a couple of attributes that wrap common response types to reduce boilerplate.
+
 ## Frameworks and libraries
 
 | Framework or Library | Purpose |

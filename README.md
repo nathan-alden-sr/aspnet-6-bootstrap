@@ -25,9 +25,15 @@ The solution is opinionated about several things. It's important to understand t
 
 You must do a few things before successfully running the API application:
 
-- Run the `create-network.ps1` script
-- Run the `run-postgresql.ps1` script
-- Run the `add-connection-string.ps1` script
+- Run the `create-network.ps1` script (see [Scripts](#scripts))
+- Run the `run-postgresql.ps1` script (see [Scripts](#scripts))
+- Run the `add-connection-string.ps1` script (see [Scripts](#scripts))
+
+## Notable features
+
+### Custom fluent result API
+
+Microsoft inexplicably does not implement `IActionResult` for every HTTP status code. Additionally, developers sometimes want to implement "response body envelopes" where all response bodies follow a certain JSON schema. In this repository, response body envelopes are implemented by the `StandardJsonResult` and `StandardJsonResult<TData>` classes. A fluent API makes it easy to compose these response body envelopes. See the [`HealthController`](source/Api/Controllers/Health/HealthController.cs) class for an example.
 
 ## Frameworks and libraries
 

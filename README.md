@@ -65,7 +65,8 @@ Seq is an excellent log sink. Both the `Api` and `ScheduledTasks` projects are c
 | [Fluent Validation](https://fluentvalidation.net/) | Model validation |
 | [Moq](https://github.com/moq/moq) | Mocking |
 | [NodaTime](https://nodatime.org/) | Date/time |
-| [Serilog](https://serilog.net/) (console sink) | Logging |
+| [Quartz.NET](https://www.quartz-scheduler.net/) | Scheduling |
+| [Serilog](https://serilog.net/) (console and Seq sinks) | Logging |
 | [Swashbuckle](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-6.0&tabs=visual-studio) | [OpenAPI](https://swagger.io/) documentation |
 | [TerraFX](https://github.com/terrafx/terrafx) | Utilities |
 | [xUnit](https://xunit.net/) | Test harness |

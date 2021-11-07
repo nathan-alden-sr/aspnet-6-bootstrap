@@ -18,7 +18,6 @@ using Swashbuckle.AspNetCore.Filters;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 var apiAssembly = Assembly.GetExecutingAssembly();
-
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 /*
@@ -51,9 +50,11 @@ builder.WebHost.ConfigureKestrel(a => a.AddServerHeader = false);
 
 // General-purpose
 
-builder.Services.AddSingleton<IClock>(SystemClock.Instance);
-builder.Services.AddScoped<IClockSnapshot, ClockSnapshot>();
-builder.Services.AddSingleton<IGuidFactory, GuidFactory>();
+builder
+    .Services
+    .AddSingleton<IClock>(SystemClock.Instance)
+    .AddScoped<IClockSnapshot, ClockSnapshot>()
+    .AddSingleton<IGuidFactory, GuidFactory>();
 
 // Business logic services
 

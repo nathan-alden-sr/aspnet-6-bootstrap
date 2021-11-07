@@ -1,25 +1,19 @@
+#Requires -PSEdition Core
+
 <#
 .SYNOPSIS
-Runs a PostgreSQL Docker container.
+Runs a Seq Docker container.
 
 .PARAMETER Id
-An ID that uniquely identifies the container and the volume that stores PostgreSQL data.
+An ID that uniquely identifies the container and the volume that stores Seq data.
 
 .PARAMETER Network
 The name of the network the container will connect to.
-
-.PARAMETER DatabaseUser
-The authenticating user.
-
-.PARAMETER DatabasePassword
-The authenticating user's password.
 #>
 [CmdletBinding()]
 param(
     [string] $Id = "company_product",
-    [string] $Network = $Id,
-    [string] $DatabaseUser = $Id,
-    [string] $DatabasePassword = $Id
+    [string] $Network = $Id
 )
 
 Set-StrictMode -Version Latest
@@ -28,24 +22,23 @@ $ErrorActionPreference = "Stop"
 
 # Pull postgres image
 
-[int] $postgresVersion = 14
 [int] $option = $Host.UI.PromptForChoice(
-    "Pull postgres:$postgresVersion image?",
+    "Pull latest datalust/seq image?",
     $null,
     @( "&Yes", "&No" ),
     1)
 
 if ($option -eq 0) {
-    Write-Verbose "Pulling postgres:$postgresVersion image"
+    Write-Verbose "Pulling datalust/seq image"
 
-    docker pull "postgres:$postgresVersion"
+    docker pull datalust/seq
 }
 
 Write-Host
 
 # Create volume
 
-[string] $volumeName = "$Id`_postgresql"
+[string] $volumeName = "$Id`_seq"
 
 $option = $Host.UI.PromptForChoice(
     "Create $volumeName volume?",
@@ -63,7 +56,7 @@ Write-Host
 
 # Run container
 
-[string] $containerName = "$Id`_postgresql"
+[string] $containerName = "$Id`_seq"
 
 Write-Verbose "Running $containerName container"
 
@@ -71,9 +64,9 @@ docker run `
     --detach `
     --restart unless-stopped `
     --name $containerName `
-    --volume "$volumeName`:/var/lib/postgresql/data" `
+    --volume "$volumeName`:/data" `
     --network $Network `
-    --publish 5432:5432 `
-    --env "POSTGRES_USER=`"$DatabaseUser`"" `
-    --env "POSTGRES_PASSWORD=`"$DatabasePassword`"" `
-    "postgres:$postgresVersion"
+    --publish 5340:80 `
+    --publish 5341:5341 `
+    --env ACCEPT_EULA=Y `
+    datalust/seq:latest

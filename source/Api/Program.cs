@@ -76,7 +76,7 @@ builder.Services.Scan(
  * Entity Framework Core
  */
 
-const string connectionStringAlias = "database";
+const string connectionStringAlias = "company_product";
 string connectionString = builder.Configuration.GetConnectionString(connectionStringAlias);
 
 if (string.IsNullOrWhiteSpace(connectionString))

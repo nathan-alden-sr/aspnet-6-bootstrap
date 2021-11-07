@@ -6,9 +6,10 @@ This repository contains a bootstrapped ASP.NET Core 6 Web API solution.
 
 Be sure to make the following changes once you clone the repository:
 
-1. Set the `<UserSecretsId>` property in `/source/Api/Company.Product.WebApi.Api.csproj` to a GUID unique to your project.
-2. Rename any occurrences of `Company` or `Product` in all file contents and filenames.
-3. Carefully look through `/Directory.Build.props` for property values to change. Some values to change are:
+1. Set the `<UserSecretsId>` property in `/source/Api/Company.Product.WebApi.Api.csproj` to a unique GUID.
+2. Set the `<UserSecretsId>` property in `/source/Api/Company.Product.WebApi.ScheduledTasks.csproj` to a unique GUID.
+3. Rename any occurrences of `Company` or `Product` in all file contents and filenames.
+4. Carefully look through `/Directory.Build.props` for property values to change. Some values to change are:
     - `<RepositoryRootUrl>`
     - `<VersionPrefix>`
     - `<VersionSuffix>`
@@ -27,7 +28,9 @@ You must do a few things before successfully running the API application:
 
 - Run the `create-network.ps1` script (see [Scripts](#scripts))
 - Run the `run-postgresql.ps1` script (see [Scripts](#scripts))
-- Run the `add-connection-string.ps1` script (see [Scripts](#scripts))
+- Run the `run-seq.ps1` script (see [Scripts](#scripts))
+- Run the `add-postgresql-connection-string.ps1` script (see [Scripts](#scripts))
+    - Be sure to run the script twice: once with `-Project Api` and once with `-Project ScheduledTasks`
 
 ## Notable features
 
@@ -45,19 +48,27 @@ Swashbuckle does not render generic model type names correctly. The [TitleFilter
 
 I wrote a couple of attributes that wrap common response types to reduce boilerplate.
 
+### Scheduled tasks app
+
+The Scheduled Tasks console application can be used to execute jobs at certain times.
+
+### Seq
+
+Seq is an excellent log sink. Both the `Api` and `ScheduledTasks` projects are configured to use Seq as a Serilog sink.
+
 ## Frameworks and libraries
 
 | Framework or Library | Purpose |
 | -------------------- | ------- |
 | [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) | [Object-relational mapping](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping)
-| [Swashbuckle](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-6.0&tabs=visual-studio) | [OpenAPI](https://swagger.io/) documentation |
-| [NodaTime](https://nodatime.org/) | Date/time |
+| [Fluent Assertions](https://fluentassertions.com/) | Test assertion |
 | [Fluent Validation](https://fluentvalidation.net/) | Model validation |
+| [Moq](https://github.com/moq/moq) | Mocking |
+| [NodaTime](https://nodatime.org/) | Date/time |
 | [Serilog](https://serilog.net/) (console sink) | Logging |
+| [Swashbuckle](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-6.0&tabs=visual-studio) | [OpenAPI](https://swagger.io/) documentation |
 | [TerraFX](https://github.com/terrafx/terrafx) | Utilities |
 | [xUnit](https://xunit.net/) | Test harness |
-| [Fluent Assertions](https://fluentassertions.com/) | Test assertion |
-| [Moq](https://github.com/moq/moq) | Mocking |
 
 ## Scripts
 
@@ -65,7 +76,9 @@ I wrote a couple of attributes that wrap common response types to reduce boilerp
 | ------ | ------- |
 | `/scripts/dev/docker/create-network.ps1` | Creates a Docker network |
 | `/scripts/dev/docker/run-postgresql.ps1` | Runs a PostgreSQL Docker container |
-| `/scripts/dev/secrets/add-connection-string.ps1` | Adds a PostgreSQL connection string using `dotnet user-secrets` |
+| `/scripts/dev/docker/run-seq.ps1` | Runs a Seq SQL Docker container |
+| `/scripts/dev/secrets/add-postgresql-connection-string.ps1` | Adds a PostgreSQL connection string using `dotnet user-secrets` |
+| `/scripts/dev/security/dotnet-devcerts.ps1` | .NET HTTPS development certificate management |
 
 ## Versioning
 

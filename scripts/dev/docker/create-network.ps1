@@ -7,7 +7,7 @@ The name of the network to create.
 #>
 [CmdletBinding()]
 param(
-    [string] $Name = "database"
+    [string] $Name = "company_product"
 )
 
 Set-StrictMode -Version Latest

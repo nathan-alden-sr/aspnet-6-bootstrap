@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\source\ScheduledTasks\Company.Product.WebApi.ScheduledTasks.csproj" />
+  </ItemGroup>
+</Project>

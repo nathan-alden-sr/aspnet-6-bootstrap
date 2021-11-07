@@ -11,7 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".root", ".root", "{2FE3A5FA
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
+		LICENSE.md = LICENSE.md
 		nuget.config = nuget.config
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{A515E8D4-3A79-4B2C-8F2A-7EBCB06FBB5E}"
@@ -58,7 +60,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{F1D6E5
 	ProjectSection(SolutionItems) = preProject
 		scripts\dev\docker\create-network.ps1 = scripts\dev\docker\create-network.ps1
 		scripts\dev\docker\run-postgresql.ps1 = scripts\dev\docker\run-postgresql.ps1
+		scripts\dev\docker\run-seq.ps1 = scripts\dev\docker\run-seq.ps1
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "security", "security", "{8C26E21F-B068-4EE9-A886-82E863D8D93B}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\dev\security\dotnet-devcerts.ps1 = scripts\dev\security\dotnet-devcerts.ps1
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Product.WebApi.ScheduledTasks", "source\ScheduledTasks\Company.Product.WebApi.ScheduledTasks.csproj", "{7E997562-BD67-42E6-A73F-BD21C57B043C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Product.WebApi.ScheduledTasks.UnitTests", "tests\ScheduledTasks.UnitTests\Company.Product.WebApi.ScheduledTasks.UnitTests.csproj", "{ADD8A660-6830-47AD-B862-2516132EF4E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,6 +102,14 @@ Global
 		{9C88EC6D-6A4D-4E97-A7E7-7117C18C416A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C88EC6D-6A4D-4E97-A7E7-7117C18C416A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C88EC6D-6A4D-4E97-A7E7-7117C18C416A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E997562-BD67-42E6-A73F-BD21C57B043C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E997562-BD67-42E6-A73F-BD21C57B043C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E997562-BD67-42E6-A73F-BD21C57B043C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E997562-BD67-42E6-A73F-BD21C57B043C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADD8A660-6830-47AD-B862-2516132EF4E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADD8A660-6830-47AD-B862-2516132EF4E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADD8A660-6830-47AD-B862-2516132EF4E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADD8A660-6830-47AD-B862-2516132EF4E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,7 +124,10 @@ Global
 		{F9DCC1F0-68A4-45EA-9310-A5EF5B2A0BD2} = {CEC726E3-F9B4-47C7-9610-5819DC21503F}
 		{41634309-DA54-4143-93E3-1692DCD0CF0B} = {511308EF-EBF4-4636-8A88-D6BD9E737FCC}
 		{9C88EC6D-6A4D-4E97-A7E7-7117C18C416A} = {511308EF-EBF4-4636-8A88-D6BD9E737FCC}
-		{F1D6E519-2B94-4CC6-929F-1457395CE8F8} = {32D6AB5C-81B3-475F-9871-AE5384815952}
+		{F1D6E519-2B94-4CC6-929F-1457395CE8F8} = {CEC726E3-F9B4-47C7-9610-5819DC21503F}
+		{8C26E21F-B068-4EE9-A886-82E863D8D93B} = {CEC726E3-F9B4-47C7-9610-5819DC21503F}
+		{7E997562-BD67-42E6-A73F-BD21C57B043C} = {7F73C65B-2171-4AF7-91D8-40EAB7425604}
+		{ADD8A660-6830-47AD-B862-2516132EF4E6} = {511308EF-EBF4-4636-8A88-D6BD9E737FCC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {71214B9F-4321-43D5-A12F-6362F8989208}

@@ -33,8 +33,8 @@ Determines whether to disable connection pooling.
 #>
 [CmdletBinding()]
 param(
-    [string] $Project = "Api",
-    [string] $Alias = "database",
+    [string] $Project,
+    [string] $Alias = "company_product",
     [string] $Configuration = "Debug",
     [string] $DatabaseHost = "localhost",
     [ushort] $DatabasePort = 5432,

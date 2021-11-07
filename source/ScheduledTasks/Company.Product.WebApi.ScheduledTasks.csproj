@@ -24,8 +24,4 @@
   <ItemGroup>
     <None Include="Dockerfile" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Jobs\" />
-  </ItemGroup>
 </Project>

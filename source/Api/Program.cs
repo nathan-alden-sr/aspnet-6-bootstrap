@@ -8,7 +8,6 @@ using Microsoft.OpenApi.Models;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 using Serilog;
-using Serilog.Core;
 using Company.Product.WebApi.Api.ExceptionHandlers;
 using Company.Product.WebApi.Api.Filters.Validation;
 using Company.Product.WebApi.Api.Logging;
@@ -26,13 +25,12 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
  * Logging
  */
 
-LoggerConfiguration loggerConfiguration = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration);
-
-loggerConfiguration.Enrich.With<UtcTimestampEnricher>();
-
-Logger logger = loggerConfiguration.CreateLogger();
-
-builder.WebHost.UseSerilog(logger);
+builder.WebHost.UseSerilog(
+    (_, configuration) =>
+        configuration
+            .ReadFrom.Configuration(builder.Configuration)
+            .Enrich.With<UtcTimestampEnricher>(),
+    true);
 
 /*
  * Caching

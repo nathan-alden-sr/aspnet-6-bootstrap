@@ -10,7 +10,12 @@ using Serilog;
 
 IHost host =
     Host.CreateDefaultBuilder(args)
-        .ConfigureHostConfiguration(builder => builder.AddUserSecrets<Worker>())
+        .ConfigureHostConfiguration(
+            builder =>
+                builder
+                    .AddUserSecrets<Worker>()
+                    .AddJsonFile("appsettings.json", false, true)
+                    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")}.json", false, true))
         .ConfigureServices(
             (context, services) =>
             {
@@ -18,9 +23,10 @@ IHost host =
                  * General purpose
                  */
 
-                services.AddSingleton<IClock>(SystemClock.Instance);
-                services.AddScoped<IClockSnapshot, ClockSnapshot>();
-                services.AddSingleton<IGuidFactory, GuidFactory>();
+                services
+                    .AddSingleton<IClock>(SystemClock.Instance)
+                    .AddScoped<IClockSnapshot, ClockSnapshot>()
+                    .AddSingleton<IGuidFactory, GuidFactory>();
 
                 /*
                  * Entity Framework Core
@@ -57,24 +63,24 @@ IHost host =
                         configurator.UseMicrosoftDependencyInjectionJobFactory();
                         configurator.UseDefaultThreadPool(Environment.ProcessorCount);
 
-                        configurator.AddJob<SampleJob>(
-                            options =>
-                            {
-                                options
-                                    .WithIdentity(nameof(SampleJob))
-                                    .WithDescription("A sample job.")
-                                    .StoreDurably();
-                            });
-
-                        configurator.AddTrigger(
-                            triggerConfigurator =>
-                            {
-                                triggerConfigurator
-                                    .WithIdentity("Every 10 seconds")
-                                    .ForJob(nameof(SampleJob))
-                                    .StartNow()
-                                    .WithSimpleSchedule(a => a.WithInterval(TimeSpan.FromSeconds(10)).RepeatForever());
-                            });
+                        configurator
+                            .AddJob<SampleJob>(
+                                options =>
+                                {
+                                    options
+                                        .WithIdentity(nameof(SampleJob))
+                                        .WithDescription("A sample job.")
+                                        .StoreDurably();
+                                })
+                            .AddTrigger(
+                                triggerConfigurator =>
+                                {
+                                    triggerConfigurator
+                                        .WithIdentity("Every 10 seconds")
+                                        .ForJob(nameof(SampleJob))
+                                        .StartNow()
+                                        .WithSimpleSchedule(a => a.WithInterval(TimeSpan.FromSeconds(10)).RepeatForever());
+                                });
                     });
 
                 services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);

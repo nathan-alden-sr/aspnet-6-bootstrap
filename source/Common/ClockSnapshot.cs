@@ -4,7 +4,8 @@ using NodaTime;
 namespace Company.Product.WebApi.Common;
 
 [DebuggerDisplay($"{{{nameof(DebuggerDisplay)},nq}}")]
-public sealed class ClockSnapshot : IClockSnapshot
+[DebuggerTypeProxy(typeof(DebugView))]
+public sealed partial class ClockSnapshot : IClockSnapshot
 {
     private readonly Instant _instant;
 

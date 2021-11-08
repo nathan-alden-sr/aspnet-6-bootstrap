@@ -1,6 +1,13 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Company.Product.WebApi.Api.ExceptionHandlers;
+using Company.Product.WebApi.Api.Filters.Validation;
+using Company.Product.WebApi.Api.Logging;
+using Company.Product.WebApi.Api.Services;
+using Company.Product.WebApi.Api.Swashbuckle;
+using Company.Product.WebApi.Common;
+using Company.Product.WebApi.Data;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,12 +15,6 @@ using Microsoft.OpenApi.Models;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 using Serilog;
-using Company.Product.WebApi.Api.ExceptionHandlers;
-using Company.Product.WebApi.Api.Filters.Validation;
-using Company.Product.WebApi.Api.Logging;
-using Company.Product.WebApi.Api.Swashbuckle;
-using Company.Product.WebApi.Common;
-using Company.Product.WebApi.Data;
 using Swashbuckle.AspNetCore.Filters;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
@@ -63,13 +64,7 @@ builder.Services.Scan(
     selector =>
         selector
             .FromAssemblyDependencies(apiAssembly)
-            .AddClasses(
-                filter =>
-                    filter.Where(
-                        type =>
-                            type.Namespace?.StartsWith($"{nameof(Company.Product.WebApi.Api.Services)}.") == true &&
-                            type.Name.EndsWith("Service", StringComparison.OrdinalIgnoreCase)),
-                true)
+            .AddClasses(filter => filter.InNamespaceOf<ServicesRootNamespace>().Where(type => type.Name.EndsWith("Service", StringComparison.Ordinal)))
             .AsMatchingInterface()
             .WithScopedLifetime());
 

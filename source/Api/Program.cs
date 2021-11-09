@@ -122,8 +122,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelS
 
 // Controllers
 
-builder
-    .Services
+builder.Services
     .AddControllers(options => options.Filters.Add<ValidationFailureFilter>())
     .AddJsonOptions(options => ConfigureJsonSerializerOptions(options.JsonSerializerOptions))
     .ConfigureApiBehaviorOptions(options => options.SuppressMapClientErrors = true);

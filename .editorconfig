@@ -53,7 +53,7 @@ max_line_length = 130
 # Organize usings
 dotnet_separate_import_directive_groups = false
 dotnet_sort_system_directives_first = true
-file_header_template = Copyright (c) Smoky Peak Software, LLC.
+file_header_template = Copyright (c) Company.
 
 # this. and Me. preferences
 dotnet_style_qualification_for_event = false:error

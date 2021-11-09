@@ -20,7 +20,7 @@ public static class MemoryCacheExtensions
                 {
                     if (options is not null)
                     {
-                        entry.SetOptions(options);
+                        _ = entry.SetOptions(options);
                     }
 
                     return factory(entry);

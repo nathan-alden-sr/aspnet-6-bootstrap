@@ -18,18 +18,19 @@ using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
+#pragma warning disable IDE0058
+
 var apiAssembly = Assembly.GetExecutingAssembly();
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 /*
  * Logging
  */
 
 builder.WebHost.UseSerilog(
-    (_, configuration) =>
-        configuration
-            .ReadFrom.Configuration(builder.Configuration)
-            .Enrich.With<UtcTimestampEnricher>(),
+    (_, configuration) => configuration
+        .ReadFrom.Configuration(builder.Configuration)
+        .Enrich.With<UtcTimestampEnricher>(),
     true);
 
 /*
@@ -61,19 +62,21 @@ builder
 
 // Automatically add all services in the Services namespace that have a matching concrete/interface type
 builder.Services.Scan(
-    selector =>
-        selector
-            .FromAssemblyDependencies(apiAssembly)
-            .AddClasses(filter => filter.InNamespaceOf<ServicesRootNamespace>().Where(type => type.Name.EndsWith("Service", StringComparison.Ordinal)))
-            .AsMatchingInterface()
-            .WithScopedLifetime());
+    selector => selector
+        .FromAssemblyDependencies(apiAssembly)
+        .AddClasses(
+            filter => filter
+                .InNamespaceOf<ServicesRootNamespace>()
+                .Where(type => type.Name.EndsWith("Service", StringComparison.Ordinal)))
+        .AsMatchingInterface()
+        .WithScopedLifetime());
 
 /*
  * Entity Framework Core
  */
 
 const string connectionStringAlias = "company_product";
-string connectionString = builder.Configuration.GetConnectionString(connectionStringAlias);
+var connectionString = builder.Configuration.GetConnectionString(connectionStringAlias);
 
 if (string.IsNullOrWhiteSpace(connectionString))
 {
@@ -82,7 +85,9 @@ if (string.IsNullOrWhiteSpace(connectionString))
 }
 
 builder.Services.AddDbContextPool<DatabaseContext>(
-    options => options.UseNpgsql(connectionString, optionsBuilder => optionsBuilder.UseNodaTime()).UseSnakeCaseNamingConvention());
+    options => options
+        .UseNpgsql(connectionString, optionsBuilder => optionsBuilder.UseNodaTime())
+        .UseSnakeCaseNamingConvention());
 
 /*
  * ASP.NET
@@ -134,20 +139,14 @@ builder.Services.AddSwaggerGen(
         options.ExampleFilters();
         options.SchemaFilter<NullableSchemaFilter>();
         options.SchemaFilter<TitleFilter>();
-        options.SwaggerDoc(
-            "v1",
-            new OpenApiInfo
-            {
-                Title = "Company Product Web API",
-                Version = "v1"
-            });
+        options.SwaggerDoc("v1", new OpenApiInfo { Title = "Company Product Web API", Version = "v1" });
     });
 
 /*
  * App
  */
 
-WebApplication app = builder.Build();
+var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
@@ -165,11 +164,7 @@ else
 }
 
 // Custom 500 responses
-app.UseExceptionHandler(
-    new ExceptionHandlerOptions
-    {
-        ExceptionHandler = UnhandledExceptionHandler.Handle
-    });
+app.UseExceptionHandler(new ExceptionHandlerOptions { ExceptionHandler = UnhandledExceptionHandler.Handle });
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

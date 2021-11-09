@@ -11,6 +11,9 @@ public sealed class ValidationFailureWithExceptionsResultData : ValidationFailur
 
     private static ValidationFailureExceptionData? CreateExceptionData(Exception? exception) =>
         exception is not null
-            ? new ValidationFailureExceptionData(exception.Message, exception.StackTrace, CreateExceptionData(exception.InnerException))
+            ? new ValidationFailureExceptionData(
+                exception.Message,
+                exception.StackTrace,
+                CreateExceptionData(exception.InnerException))
             : null;
 }

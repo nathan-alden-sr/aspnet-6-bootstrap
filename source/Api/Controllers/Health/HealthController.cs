@@ -29,7 +29,7 @@ public sealed class HealthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IStandardJsonResult<GetHealthResultData>))]
     public async Task<IStandardJsonResult> GetAsync(CancellationToken cancellationToken = default)
     {
-        DatabaseHealth databaseHealth =
+        var databaseHealth =
             await _memoryCache.ThreadSafeLazyGetOrCreate(
                 DatabaseHealthCacheKey,
                 async entry =>
@@ -46,12 +46,9 @@ public sealed class HealthController : ControllerBase
                         return DatabaseHealth.Unhealthy;
                     }
                 },
-                new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1)
-                });
-        GetHealthResultData resultData = new(ApiHealth.Healthy, databaseHealth);
-        bool healthy = resultData.ApiHealth == ApiHealth.Healthy && resultData.DatabaseHealth == DatabaseHealth.Healthy;
+                new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) });
+        var resultData = new GetHealthResultData(ApiHealth.Healthy, databaseHealth);
+        var healthy = resultData.ApiHealth == ApiHealth.Healthy && resultData.DatabaseHealth == DatabaseHealth.Healthy;
 
         return Result.Ok().AsStandardJson(resultData).WithMessage($"The API is {(healthy ? "" : "not ")}functioning normally.");
     }

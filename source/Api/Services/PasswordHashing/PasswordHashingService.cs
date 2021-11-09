@@ -4,7 +4,12 @@ namespace Company.Product.WebApi.Api.Services.PasswordHashing;
 
 public sealed class PasswordHashingService : IPasswordHashingService
 {
-    public (byte[] salt, byte[] hash) HashPassword(string password, int saltByteCount, int hashByteCount, int iterations, HashAlgorithmName algorithmName)
+    public (byte[] salt, byte[] hash) HashPassword(
+        string password,
+        int saltByteCount,
+        int hashByteCount,
+        int iterations,
+        HashAlgorithmName algorithmName)
     {
         var salt = new byte[saltByteCount];
         var hash = new byte[hashByteCount];
@@ -14,7 +19,12 @@ public sealed class PasswordHashingService : IPasswordHashingService
         return (salt, hash);
     }
 
-    public bool TestPassword(string password, ReadOnlySpan<byte> salt, ReadOnlySpan<byte> expectedHash, int iterations, HashAlgorithmName algorithmName)
+    public bool TestPassword(
+        string password,
+        ReadOnlySpan<byte> salt,
+        ReadOnlySpan<byte> expectedHash,
+        int iterations,
+        HashAlgorithmName algorithmName)
     {
         var actualHash = new byte[expectedHash.Length];
 

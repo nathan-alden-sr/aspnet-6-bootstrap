@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using Company.Product.WebApi.Api.Filters.Validation;
 using Company.Product.WebApi.Api.Results;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Company.Product.WebApi.Api.Swashbuckle;
 

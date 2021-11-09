@@ -1,72 +1,74 @@
 <Project>
-	<!--
+
+  <!--
     An MSBuild helper task that versions .NET assemblies.
 
     Based on the versioning scheme used by Microsoft for .NET-related .NET assemblies.
     https://github.com/dotnet/arcade/blob/main/src/Microsoft.DotNet.Arcade.Sdk/src/CalculateAssemblyAndFileVersions.cs
   -->
-	<UsingTask TaskName="DotNetVersionHelper" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
-		<ParameterGroup>
-			<!-- 
+  <UsingTask TaskName="DotNetVersionHelper" TaskFactory="RoslynCodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <!-- 
         The canonical version prefix. This prefix should follow Semantic Versioning 2.0.0 and must always
         use exactly three components.
         https://semver.org/
       -->
-			<VersionPrefix ParameterType="System.String" Required="true" Output="true" />
+      <VersionPrefix ParameterType="System.String" Required="true" Output="true" />
 
-			<!--
+      <!--
         The canonical version suffix. This suffix is used in PE binary product version strings and as the
         prerelease identifier for NuGet packages.
       -->
-			<VersionSuffix ParameterType="System.String" Required="false" Output="true" />
+      <VersionSuffix ParameterType="System.String" Required="false" Output="true" />
 
-			<!--
+      <!--
         The version used for NuGet packages. The caller should not provide a value for this parameter as it
         will be overwritten.
       -->
-			<PackageVersion ParameterType="System.String" Required="false" Output="true" />
+      <PackageVersion ParameterType="System.String" Required="false" Output="true" />
 
-			<!--
+      <!--
         Provided by Azure Pipelines. Expected to be in the format "yyyyMMdd.r".
       -->
-			<BuildNumber ParameterType="System.String" Required="false" />
+      <BuildNumber ParameterType="System.String" Required="false" />
 
-			<!--
+      <!--
         The commit hash of the commit downloaded for the build.
       -->
-			<GitCommitHash ParameterType="System.String" Required="false" />
+      <GitCommitHash ParameterType="System.String" Required="false" />
 
-			<!-- 
+      <!-- 
         The ID of the pull request the branch is associated with, if applicable.
       -->
-			<PullRequestId ParameterType="System.String" Required="false" />
+      <PullRequestId ParameterType="System.String" Required="false" />
 
-			<!-- 
+      <!-- 
         Disable automatically appending source revision ID.
       -->
-			<IncludeSourceRevisionInInformationalVersion ParameterType="System.Boolean" Required="false">false</IncludeSourceRevisionInInformationalVersion>
+      <IncludeSourceRevisionInInformationalVersion ParameterType="System.Boolean" Required="false">false</IncludeSourceRevisionInInformationalVersion>
 
-			<!-- 
+      <!-- 
         Contains the calculated assembly version after task execution.
       -->
-			<AssemblyVersion ParameterType="System.String" Output="true" />
+      <AssemblyVersion ParameterType="System.String" Output="true" />
 
-			<!-- 
+      <!-- 
         Contains the calculated file version after task execution.
       -->
-			<FileVersion ParameterType="System.String" Output="true" />
+      <FileVersion ParameterType="System.String" Output="true" />
 
-			<!-- 
+      <!-- 
         Contains the calculated informational version after task execution.
       -->
-			<InformationalVersion ParameterType="System.String" Output="true" />
-		</ParameterGroup>
-		<Task>
-			<Using Namespace="System" />
-			<Using Namespace="System.Globalization" />
-			<Using Namespace="System.Text.RegularExpressions" />
-			<Code Type="Fragment" Language="cs">
-				<![CDATA[
+      <InformationalVersion ParameterType="System.String" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.Globalization" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
 if (!Version.TryParse(VersionPrefix, out Version versionPrefix) ||
     versionPrefix.Major == -1 ||
     versionPrefix.Minor == -1 ||
@@ -191,7 +193,8 @@ InformationalVersion = $"{versionPrefix}{(!string.IsNullOrWhiteSpace(VersionSuff
 
 Log.LogMessage(MessageImportance.Low, $"Informational version is {InformationalVersion}");
 ]]>
-			</Code>
-		</Task>
-	</UsingTask>
+      </Code>
+    </Task>
+  </UsingTask>
+
 </Project>

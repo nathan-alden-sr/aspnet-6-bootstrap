@@ -11,26 +11,28 @@ public sealed class TitleFilter : ISchemaFilter
         ThrowIfNull(schema, nameof(schema));
         ThrowIfNull(context, nameof(context));
 
-        schema.Title = GetTypeName(context.Type, new StringBuilder());
+        var stringBuilder = new StringBuilder();
+
+        GetTypeName(context.Type, stringBuilder);
+
+        schema.Title = stringBuilder.ToString();
     }
 
-    private static string GetTypeName(Type type, StringBuilder stringBuilder)
+    private static void GetTypeName(Type type, StringBuilder stringBuilder)
     {
-        stringBuilder.Append(type.IsGenericType ? type.Name[..type.Name.LastIndexOf('`')] : type.Name);
+        _ = stringBuilder.Append(type.IsGenericType ? type.Name[..type.Name.LastIndexOf('`')] : type.Name);
 
         // ReSharper disable once InvertIf
         if (type.IsGenericType)
         {
-            stringBuilder.Append('<');
+            _ = stringBuilder.Append('<');
 
-            foreach (Type genericArgument in type.GetGenericArguments())
+            foreach (var genericArgument in type.GetGenericArguments())
             {
                 GetTypeName(genericArgument, stringBuilder);
             }
 
-            stringBuilder.Append('>');
+            _ = stringBuilder.Append('>');
         }
-
-        return stringBuilder.ToString();
     }
 }

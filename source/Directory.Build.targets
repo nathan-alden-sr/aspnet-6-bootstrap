@@ -1,4 +1,5 @@
 <Project>
+
   <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.targets" />
 
   <ItemGroup>
@@ -8,4 +9,5 @@
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
     <PackageReference Update="DotNet.ReproducibleBuilds" Version="0.1.66" />
   </ItemGroup>
+
 </Project>

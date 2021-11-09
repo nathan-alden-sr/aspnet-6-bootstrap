@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Company.Product.WebApi.Data;
 
+#pragma warning disable IDE0058
+
 public sealed class EntityConfiguration : IEntityTypeConfiguration<Entity>
 {
     public void Configure(EntityTypeBuilder<Entity> builder)

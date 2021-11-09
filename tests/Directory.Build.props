@@ -1,4 +1,5 @@
 <Project>
+
   <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
 
   <PropertyGroup>
@@ -13,4 +14,5 @@
     <PackageReference Include="xunit" IsImplicitlyDefined="true" PrivateAssets="all" />
     <PackageReference Include="xunit.runner.visualstudio" IsImplicitlyDefined="true" PrivateAssets="all" />
   </ItemGroup>
+
 </Project>

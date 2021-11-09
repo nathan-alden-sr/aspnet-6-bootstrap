@@ -10,8 +10,6 @@ public sealed class DatabaseContext : DbContext
 
     public DbSet<Entity> Tables { get; set; } = default!;
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+    protected override void OnModelCreating(ModelBuilder modelBuilder) =>
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
-    }
 }

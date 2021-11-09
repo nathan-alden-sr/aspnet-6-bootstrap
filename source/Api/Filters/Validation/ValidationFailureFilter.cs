@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Mvc.Filters;
 using Company.Product.WebApi.Api.Results;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Company.Product.WebApi.Api.Filters.Validation;
 
@@ -13,7 +13,7 @@ public class ValidationFailureFilter : IActionFilter
         }
 
         var hostEnvironment = context.HttpContext.RequestServices.GetRequiredService<IHostEnvironment>();
-        IEnumerable<ValidationFailureResultData> errors =
+        var errors =
             context
                 .ModelState.Values
                 .SelectMany(a => a.Errors)

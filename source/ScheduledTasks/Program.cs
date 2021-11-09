@@ -8,14 +8,15 @@ using NodaTime;
 using Quartz;
 using Serilog;
 
-IHost host =
+#pragma warning disable IDE0058
+
+var host =
     Host.CreateDefaultBuilder(args)
         .ConfigureHostConfiguration(
-            builder =>
-                builder
-                    .AddUserSecrets<Worker>()
-                    .AddJsonFile("appsettings.json", false, true)
-                    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")}.json", false, true))
+            builder => builder
+                .AddUserSecrets<Worker>()
+                .AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")}.json", false, true))
         .ConfigureServices(
             (context, services) =>
             {
@@ -33,7 +34,7 @@ IHost host =
                  */
 
                 const string connectionStringAlias = "company_product";
-                string connectionString = context.Configuration.GetConnectionString(connectionStringAlias);
+                var connectionString = context.Configuration.GetConnectionString(connectionStringAlias);
 
                 if (string.IsNullOrWhiteSpace(connectionString))
                 {
@@ -42,7 +43,9 @@ IHost host =
                 }
 
                 services.AddDbContextPool<DatabaseContext>(
-                    options => options.UseNpgsql(connectionString, optionsBuilder => optionsBuilder.UseNodaTime()).UseSnakeCaseNamingConvention());
+                    options => options
+                        .UseNpgsql(connectionString, optionsBuilder => optionsBuilder.UseNodaTime())
+                        .UseSnakeCaseNamingConvention());
 
                 /*
                  * Quartz.NET
@@ -65,22 +68,16 @@ IHost host =
 
                         configurator
                             .AddJob<SampleJob>(
-                                options =>
-                                {
-                                    options
-                                        .WithIdentity(nameof(SampleJob))
-                                        .WithDescription("A sample job.")
-                                        .StoreDurably();
-                                })
+                                options => options
+                                    .WithIdentity(nameof(SampleJob))
+                                    .WithDescription("A sample job.")
+                                    .StoreDurably())
                             .AddTrigger(
-                                triggerConfigurator =>
-                                {
-                                    triggerConfigurator
-                                        .WithIdentity("Every 10 seconds")
-                                        .ForJob(nameof(SampleJob))
-                                        .StartNow()
-                                        .WithSimpleSchedule(a => a.WithInterval(TimeSpan.FromSeconds(10)).RepeatForever());
-                                });
+                                triggerConfigurator => triggerConfigurator
+                                    .WithIdentity("Every 10 seconds")
+                                    .ForJob(nameof(SampleJob))
+                                    .StartNow()
+                                    .WithSimpleSchedule(a => a.WithInterval(TimeSpan.FromSeconds(10)).RepeatForever()));
                     });
 
                 services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
@@ -92,12 +89,9 @@ IHost host =
                 services.AddHostedService<Worker>();
             })
         .UseSerilog(
-            (context, configuration) =>
-            {
-                configuration
-                    .ReadFrom.Configuration(context.Configuration)
-                    .Enrich.With<UtcTimestampEnricher>();
-            })
+            (context, configuration) => configuration
+                .ReadFrom.Configuration(context.Configuration)
+                .Enrich.With<UtcTimestampEnricher>())
         .Build();
 
 await host.RunAsync();

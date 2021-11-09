@@ -1,4 +1,4 @@
-﻿namespace Company.Product.WebApi.Common;
+namespace Company.Product.WebApi.Common;
 
 public sealed class GuidFactory : IGuidFactory
 {

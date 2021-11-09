@@ -1,4 +1,4 @@
-﻿namespace Company.Product.WebApi.Data;
+namespace Company.Product.WebApi.Data;
 
 public sealed class Entity
 {

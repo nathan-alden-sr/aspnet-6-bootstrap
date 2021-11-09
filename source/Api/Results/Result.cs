@@ -1,10 +1,10 @@
 // Portions of this source code (c) the .NET Foundation.
 
 using System.Text.Json.Serialization;
+using Company.Product.WebApi.Api.Filters.Validation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Primitives;
-using Company.Product.WebApi.Api.Filters.Validation;
 
 namespace Company.Product.WebApi.Api.Results;
 
@@ -39,7 +39,7 @@ public class Result : IResult
 
         context.HttpContext.Response.StatusCode = StatusCode.Value;
 
-        foreach (Action<ActionContext> formatter in Formatters)
+        foreach (var formatter in Formatters)
         {
             formatter(context);
         }
@@ -83,7 +83,8 @@ public class Result : IResult
     // 201 Created
 
     public static Result Created(string location) =>
-        new Result(StatusCodes.Status201Created).WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
+        new Result(StatusCodes.Status201Created)
+            .WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
 
     public static Result Created(Uri location) =>
         Created(location.ToString());
@@ -93,9 +94,11 @@ public class Result : IResult
             .WithFormatting(
                 context =>
                 {
-                    HttpRequest request = context.HttpContext.Request;
-                    IUrlHelper urlHelper = context.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context);
-                    string? url = urlHelper.Action(actionName, controllerName, routeValues, request.Scheme, request.Host.ToUriComponent());
+                    var request = context.HttpContext.Request;
+                    var urlHelper =
+                        context.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context);
+                    var url =
+                        urlHelper.Action(actionName, controllerName, routeValues, request.Scheme, request.Host.ToUriComponent());
 
                     if (string.IsNullOrEmpty(url))
                     {
@@ -118,8 +121,9 @@ public class Result : IResult
                 {
                     ThrowIfNull(context, nameof(context));
 
-                    IUrlHelper urlHelper = context.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context);
-                    string? url = urlHelper.Link(routeName, routeValues);
+                    var urlHelper =
+                        context.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context);
+                    var url = urlHelper.Link(routeName, routeValues);
 
                     if (string.IsNullOrEmpty(url))
                     {
@@ -138,7 +142,8 @@ public class Result : IResult
     // 202 Accepted
 
     public static Result Accepted(string? location) =>
-        new Result(StatusCodes.Status202Accepted).WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
+        new Result(StatusCodes.Status202Accepted)
+            .WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
 
     public static Result Accepted(Uri? location) =>
         Accepted(location?.ToString());
@@ -148,9 +153,11 @@ public class Result : IResult
             .WithFormatting(
                 context =>
                 {
-                    HttpRequest request = context.HttpContext.Request;
-                    IUrlHelper urlHelper = context.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context);
-                    string? url = urlHelper.Action(actionName, controllerName, routeValues, request.Scheme, request.Host.ToUriComponent());
+                    var request = context.HttpContext.Request;
+                    var urlHelper =
+                        context.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context);
+                    var url =
+                        urlHelper.Action(actionName, controllerName, routeValues, request.Scheme, request.Host.ToUriComponent());
 
                     if (string.IsNullOrEmpty(url))
                     {
@@ -173,8 +180,9 @@ public class Result : IResult
                 {
                     ThrowIfNull(context, nameof(context));
 
-                    IUrlHelper urlHelper = context.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context);
-                    string? url = urlHelper.Link(routeName, routeValues);
+                    var urlHelper =
+                        context.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context);
+                    var url = urlHelper.Link(routeName, routeValues);
 
                     if (string.IsNullOrEmpty(url))
                     {
@@ -198,19 +206,23 @@ public class Result : IResult
     // 300 Multiple Choices
 
     public static Result MultipleChoices(string? location) =>
-        new Result(StatusCodes.Status300MultipleChoices).WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
+        new Result(StatusCodes.Status300MultipleChoices)
+            .WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
 
     public static Result MultipleChoices(Uri? location) =>
-        new Result(StatusCodes.Status300MultipleChoices).WithFormatting(context => context.HttpContext.Response.Headers.Location = location?.ToString());
+        new Result(StatusCodes.Status300MultipleChoices)
+            .WithFormatting(context => context.HttpContext.Response.Headers.Location = location?.ToString());
 
     public static Result MultipleChoicesWithPreferredAction(string? actionName, string? controllerName, object? routeValues) =>
         new Result(StatusCodes.Status300MultipleChoices)
             .WithFormatting(
                 context =>
                 {
-                    HttpRequest request = context.HttpContext.Request;
-                    IUrlHelper urlHelper = context.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context);
-                    string? url = urlHelper.Action(actionName, controllerName, routeValues, request.Scheme, request.Host.ToUriComponent());
+                    var request = context.HttpContext.Request;
+                    var urlHelper =
+                        context.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context);
+                    var url =
+                        urlHelper.Action(actionName, controllerName, routeValues, request.Scheme, request.Host.ToUriComponent());
 
                     if (string.IsNullOrEmpty(url))
                     {
@@ -233,8 +245,9 @@ public class Result : IResult
                 {
                     ThrowIfNull(context, nameof(context));
 
-                    IUrlHelper urlHelper = context.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context);
-                    string? url = urlHelper.Link(routeName, routeValues);
+                    var urlHelper =
+                        context.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context);
+                    var url = urlHelper.Link(routeName, routeValues);
 
                     if (string.IsNullOrEmpty(url))
                     {
@@ -253,7 +266,8 @@ public class Result : IResult
     // 301 Moved Permanently
 
     public static Result MovedPermanently(string location) =>
-        new Result(StatusCodes.Status301MovedPermanently).WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
+        new Result(StatusCodes.Status301MovedPermanently)
+            .WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
 
     public static Result MovedPermanently(Uri location) =>
         MovedPermanently(location.ToString());
@@ -261,7 +275,8 @@ public class Result : IResult
     // 302 Found
 
     public static Result Found(string location) =>
-        new Result(StatusCodes.Status302Found).WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
+        new Result(StatusCodes.Status302Found)
+            .WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
 
     public static Result Found(Uri location) =>
         Found(location.ToString());
@@ -269,7 +284,8 @@ public class Result : IResult
     // 303 See Other
 
     public static Result SeeOther(string location) =>
-        new Result(StatusCodes.Status302Found).WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
+        new Result(StatusCodes.Status302Found)
+            .WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
 
     public static Result SeeOther(Uri location) =>
         SeeOther(location.ToString());
@@ -281,7 +297,8 @@ public class Result : IResult
     // 307 Temporary Redirect
 
     public static Result TemporaryRedirect(string location) =>
-        new Result(StatusCodes.Status307TemporaryRedirect).WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
+        new Result(StatusCodes.Status307TemporaryRedirect)
+            .WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
 
     public static Result TemporaryRedirect(Uri location) =>
         TemporaryRedirect(location.ToString());
@@ -289,7 +306,8 @@ public class Result : IResult
     // 308 Permanent Redirect
 
     public static Result PermanentRedirect(string location) =>
-        new Result(StatusCodes.Status308PermanentRedirect).WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
+        new Result(StatusCodes.Status308PermanentRedirect)
+            .WithFormatting(context => context.HttpContext.Response.Headers.Location = location);
 
     public static Result PermanentRedirect(Uri location) =>
         PermanentRedirect(location.ToString());
@@ -303,10 +321,13 @@ public class Result : IResult
         IEnumerable<ValidationFailureResultData>? messages) =>
         new(StatusCodes.Status400BadRequest, messages, message);
 
-    public static StandardJsonResult<IEnumerable<ValidationFailureResultData>> BadRequest(IEnumerable<ValidationFailureResultData> messages) =>
+    public static StandardJsonResult<IEnumerable<ValidationFailureResultData>> BadRequest(
+        IEnumerable<ValidationFailureResultData> messages) =>
         new(StatusCodes.Status400BadRequest, messages);
 
-    public static StandardJsonResult<IEnumerable<ValidationFailureResultData>> BadRequest(string? message, params string[] messages) =>
+    public static StandardJsonResult<IEnumerable<ValidationFailureResultData>> BadRequest(
+        string? message,
+        params string[] messages) =>
         BadRequest(message, messages.Select(a => new ValidationFailureResultData(a)));
 
     public static StandardJsonResult<IEnumerable<ValidationFailureResultData>> BadRequest(params string[] messages) =>

@@ -1,3 +1,6 @@
-﻿namespace Company.Product.WebApi.Api.Filters.Validation;
+namespace Company.Product.WebApi.Api.Filters.Validation;
 
-public sealed record ValidationFailureExceptionData(string Message, string? StackTrace, ValidationFailureExceptionData? InnerException);
+public sealed record ValidationFailureExceptionData(
+    string Message,
+    string? StackTrace,
+    ValidationFailureExceptionData? InnerException);

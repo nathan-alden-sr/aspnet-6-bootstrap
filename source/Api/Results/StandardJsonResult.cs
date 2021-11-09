@@ -6,7 +6,11 @@ namespace Company.Product.WebApi.Api.Results;
 
 public class StandardJsonResult : Result, IStandardJsonResult
 {
-    public StandardJsonResult(int? statusCode = null, string? message = null, IEnumerable<Action<ActionContext>>? formatters = null) : base(statusCode)
+    public StandardJsonResult(
+        int? statusCode = null,
+        string? message = null,
+        IEnumerable<Action<ActionContext>>? formatters = null)
+        : base(statusCode, formatters)
     {
         Message = message;
     }
@@ -19,15 +23,13 @@ public class StandardJsonResult : Result, IStandardJsonResult
 
         var jsonOptions = context.HttpContext.RequestServices.GetRequiredService<IOptions<JsonOptions>>();
 
-        await context.HttpContext.Response.WriteAsJsonAsync(GetStandardJsonAnonymousObject(), jsonOptions.Value.SerializerOptions);
+        await context.HttpContext.Response.WriteAsJsonAsync(
+            GetStandardJsonAnonymousObject(),
+            jsonOptions.Value.SerializerOptions);
     }
 
     protected virtual object GetStandardJsonAnonymousObject() =>
-        new
-        {
-            Data = (object?)null,
-            Message
-        };
+        new { Data = (object?)null, Message };
 
     public StandardJsonResult<T> WithData<T>(T? data) =>
         new(StatusCode, data, Message, Formatters);

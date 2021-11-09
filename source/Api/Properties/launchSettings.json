@@ -1,5 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/launchsettings.json",
+
   "profiles": {
     "Api": {
       "commandName": "Project",
@@ -11,6 +12,7 @@
       "applicationUrl": "https://localhost:7158;http://0.0.0.0:5158",
       "dotnetRunMessages": true
     },
+
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,

@@ -330,6 +330,10 @@ public class Result : IResult
         new(StatusCodes.Status400BadRequest, messages);
 
     public static StandardJsonResult<IEnumerable<ValidationFailureResultData>> BadRequest(
+        params ValidationFailureResultData[] messages) =>
+        new(StatusCodes.Status400BadRequest, messages);
+
+    public static StandardJsonResult<IEnumerable<ValidationFailureResultData>> BadRequest(
         string? message,
         params string[] messages) =>
         BadRequest(message, messages.Select(a => new ValidationFailureResultData(a)));

@@ -12,6 +12,9 @@ public sealed class PasswordHashingService : IPasswordHashingService
         HashAlgorithmName algorithmName)
     {
         var salt = new byte[saltByteCount];
+
+        RandomNumberGenerator.Fill(salt);
+
         var hash = new byte[hashByteCount];
 
         Rfc2898DeriveBytes.Pbkdf2(password, salt, hash, iterations, algorithmName);

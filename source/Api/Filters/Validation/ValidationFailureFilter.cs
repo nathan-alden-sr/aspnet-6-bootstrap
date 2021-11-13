@@ -23,7 +23,7 @@ public class ValidationFailureFilter : IActionFilter
                             ? new ValidationFailureWithExceptionsResultData(a.ErrorMessage, a.Exception)
                             : new ValidationFailureResultData(a.ErrorMessage));
 
-        context.Result = Result.BadRequest("Request model is invalid.", errors);
+        context.Result = ActionResult.BadRequest("Request model is invalid.", errors);
     }
 
     public void OnActionExecuted(ActionExecutedContext context)

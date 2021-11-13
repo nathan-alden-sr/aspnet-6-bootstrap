@@ -138,7 +138,13 @@ builder.Services.AddSwaggerGen(
         options.ExampleFilters();
         options.SchemaFilter<NullableSchemaFilter>();
         options.SchemaFilter<TitleFilter>();
-        options.SwaggerDoc("v1", new OpenApiInfo { Title = "Company Product Web API", Version = "v1" });
+        options.SwaggerDoc(
+            "v1",
+            new OpenApiInfo
+            {
+                Title = "Company Product Web API",
+                Version = "v1"
+            });
     });
 
 /*

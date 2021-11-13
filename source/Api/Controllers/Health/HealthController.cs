@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Swashbuckle.AspNetCore.Annotations;
+using ActionResult = Company.Product.WebApi.Api.Results.ActionResult;
 
 namespace Company.Product.WebApi.Api.Controllers.Health;
 
@@ -27,7 +28,7 @@ public sealed class HealthController : ControllerBase
     [HttpGet]
     [SwaggerOperation("Reports on the health of the API.")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IStandardJsonResult<GetHealthResultData>))]
-    public async Task<IStandardJsonResult> GetAsync(CancellationToken cancellationToken = default)
+    public async Task<StandardJsonActionResult> GetAsync(CancellationToken cancellationToken = default)
     {
         var databaseHealth =
             await _memoryCache.ThreadSafeLazyGetOrCreate(
@@ -50,6 +51,9 @@ public sealed class HealthController : ControllerBase
         var resultData = new GetHealthResultData(ApiHealth.Healthy, databaseHealth);
         var healthy = resultData.ApiHealth == ApiHealth.Healthy && resultData.DatabaseHealth == DatabaseHealth.Healthy;
 
-        return Result.Ok().AsStandardJson(resultData).WithMessage($"The API is {(healthy ? "" : "not ")}functioning normally.");
+        return ActionResult
+            .Ok()
+            .AsStandardJson(resultData)
+            .WithMessage($"The API is {(healthy ? "" : "not ")}functioning normally.");
     }
 }

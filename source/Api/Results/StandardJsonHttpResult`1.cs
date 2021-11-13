@@ -1,14 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace Company.Product.WebApi.Api.Results;
 
-public sealed class StandardJsonResult<TData> : StandardJsonResult, IStandardJsonResult<TData>
+public class StandardJsonHttpResult<TData> : StandardJsonHttpResult, IStandardJsonResult<HttpContext, TData>
 {
-    public StandardJsonResult(
+    public StandardJsonHttpResult(
         int? statusCode = null,
         TData? data = default,
         string? message = null,
-        IEnumerable<Action<ActionContext>>? formatters = null)
+        IEnumerable<Func<ContextWrapper<HttpContext>, Task>>? formatters = null)
         : base(statusCode, message, formatters)
     {
         Data = data;
@@ -17,9 +15,13 @@ public sealed class StandardJsonResult<TData> : StandardJsonResult, IStandardJso
     public TData? Data { get; private set; }
 
     protected override object GetStandardJsonAnonymousObject() =>
-        new { Data, Message };
+        new
+        {
+            Data,
+            Message
+        };
 
-    public StandardJsonResult<TData> WithData(TData? data)
+    public StandardJsonHttpResult<TData> WithData(TData? data)
     {
         Data = data;
 

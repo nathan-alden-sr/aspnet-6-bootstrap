@@ -44,7 +44,6 @@ indent_style = tab
 
 [*.cs]
 # Roslyn incorrectly recommends removal of ReSharper suppression attributes
-dotnet_remove_unnecessary_suppression_exclusions = category: ReSharper
 max_line_length = 130
 
 # IDE-generated
@@ -99,7 +98,7 @@ dotnet_style_readonly_field = true:error
 dotnet_code_quality_unused_parameters = all
 
 # Suppression preferences
-dotnet_remove_unnecessary_suppression_exclusions = 0
+dotnet_remove_unnecessary_suppression_exclusions = category: ReSharper
 
 # New line preferences
 dotnet_style_allow_multiple_blank_lines_experimental = false

@@ -1,7 +1,5 @@
 using Company.Product.WebApi.Api.Results;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http.Json;
-using Microsoft.Extensions.Options;
 
 namespace Company.Product.WebApi.Api.ExceptionHandlers;
 
@@ -12,7 +10,6 @@ public static class UnhandledExceptionHandler
         ThrowIfNull(context, nameof(context));
 
         var hostEnvironment = context.RequestServices.GetRequiredService<IHostEnvironment>();
-        var jsonOptions = context.RequestServices.GetRequiredService<IOptions<JsonOptions>>();
         var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
 
         AssertNotNull(exceptionHandlerFeature);
@@ -26,7 +23,7 @@ public static class UnhandledExceptionHandler
                 : null;
 
         var result =
-            Result
+            HttpResult
                 .InternalServerError()
                 .AsStandardJson(
                     hostEnvironment.IsDevelopment()
@@ -34,10 +31,6 @@ public static class UnhandledExceptionHandler
                         : null,
                     "An unhandled exception has occurred.");
 
-        Assert(result.StatusCode is not null);
-
-        context.Response.StatusCode = result.StatusCode.Value;
-
-        await context.Response.WriteAsJsonAsync(new { result.Data, result.Message }, jsonOptions.Value.SerializerOptions);
+        await result.ExecuteResultAsync(context);
     }
 }

@@ -1,15 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 namespace Company.Product.WebApi.Api.Results;
 
-public class StandardJsonResult : Result, IStandardJsonResult
+public class StandardJsonActionResult : ActionResult, IStandardJsonResult<ActionContext>
 {
-    public StandardJsonResult(
+    public StandardJsonActionResult(
         int? statusCode = null,
         string? message = null,
-        IEnumerable<Action<ActionContext>>? formatters = null)
+        IEnumerable<Func<ContextWrapper<ActionContext>, Task>>? formatters = null)
         : base(statusCode, formatters)
     {
         Message = message;
@@ -29,12 +29,16 @@ public class StandardJsonResult : Result, IStandardJsonResult
     }
 
     protected virtual object GetStandardJsonAnonymousObject() =>
-        new { Data = (object?)null, Message };
+        new
+        {
+            Data = (object?)null,
+            Message
+        };
 
-    public StandardJsonResult<T> WithData<T>(T? data) =>
+    public StandardJsonActionResult<T> WithData<T>(T? data) =>
         new(StatusCode, data, Message, Formatters);
 
-    public StandardJsonResult WithMessage(string? message)
+    public StandardJsonActionResult WithMessage(string? message)
     {
         Message = message;
 

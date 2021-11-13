@@ -1,6 +1,7 @@
 namespace Company.Product.WebApi.Api.Results;
 
-public interface IStandardJsonResult<out TData> : IStandardJsonResult
+public interface IStandardJsonResult<TContext> : IResult<TContext>
+    where TContext : class
 {
-    TData? Data { get; }
+    string? Message { get; }
 }

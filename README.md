@@ -38,7 +38,7 @@ You must do a few things before successfully running the API application:
 
 A common need is to wrap all responses in a response body envelope. This is simple enough within controller action methods but gets more challenging outside of controller contexts (e.g., validation filters and unhandled exception handlers). Additionally, Microsoft inexplicably does not implement `IActionResult` for every HTTP status code.
 
-I wrote a complete replacement for Microsoft's controller helper methods like `Ok()` that I call _actions_. With a simple fluent interface, you can construct an enveloped response. For action methods, use the `ActionResult` class (see [`HealthController`](source/Api/Controllers/Health/HealthController.cs)). For outside of controller contexts where you only have `HttpContext`, use the `HttpResult` class (see [`HealthController`](source/Api/ExceptionHandlers/UnhandledExceptionHandler.cs)).
+I wrote a complete replacement for Microsoft's controller helper methods like `Ok()` that I call _actions_. With a simple fluent interface, you can construct an enveloped response. For action methods, use the [`ActionResult`](source/Api/Results/ActionResult.cs) class (see [`HealthController.cs`](source/Api/Controllers/Health/HealthController.cs)). For outside of controller contexts where you only have access to `HttpContext`, use the [`HttpResult`](source/Api/Results/HttpResult.cs) class (see [`UnhandledExceptionHandler.cs`](source/Api/ExceptionHandlers/UnhandledExceptionHandler.cs)).
 
 ### Swashbuckle customizations
 

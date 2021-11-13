@@ -30,13 +30,15 @@ You must do a few things before successfully running the API application:
 - Run the `run-postgresql.ps1` script (see [Scripts](#scripts))
 - Run the `run-seq.ps1` script (see [Scripts](#scripts))
 - Run the `add-postgresql-connection-string.ps1` script (see [Scripts](#scripts))
-    - Be sure to run the script twice: once with `-Project Api` and once with `-Project ScheduledTasks`
+  - Be sure to run the script twice: once with `-Project Api` and once with `-Project ScheduledTasks`
 
 ## Notable features
 
 ### Custom fluent result API
 
-Microsoft inexplicably does not implement `IActionResult` for every HTTP status code. Additionally, developers sometimes want to implement "response body envelopes" where all response bodies follow a certain JSON schema. I implemented response body envelopes with the `StandardJsonResult` and `StandardJsonResult<TData>` classes. A fluent API makes it easy to compose these response body envelopes. See the [`HealthController`](source/Api/Controllers/Health/HealthController.cs) class for an example. The full set of helper methods can be found in [Result.cs](source/Api/Results/Result.cs).
+A common need is to wrap all responses in a response body envelope. This is simple enough within controller action methods but gets more challenging outside of controller contexts (e.g., validation filters and unhandled exception handlers). Additionally, Microsoft inexplicably does not implement `IActionResult` for every HTTP status code.
+
+I wrote a complete replacement for Microsoft's controller helper methods like `Ok()` that I call _actions_. With a simple fluent interface, you can construct an enveloped response. For action methods, use the `ActionResult` class (see [`HealthController`](source/Api/Controllers/Health/HealthController.cs)). For outside of controller contexts where you only have `HttpContext`, use the `HttpResult` class (see [`HealthController`](source/Api/ExceptionHandlers/UnhandledExceptionHandler.cs)).
 
 ### Swashbuckle customizations
 

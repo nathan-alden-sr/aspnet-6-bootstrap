@@ -1,9 +1,9 @@
 using System.Security.Cryptography;
-using Company.Product.WebApi.Api.Services.PasswordHashing;
+using Company.Product.WebApi.Services.PasswordHashing;
 using FluentAssertions;
 using Xunit;
 
-namespace Company.Product.WebApi.Api.UnitTests.PasswordHashingServiceTests;
+namespace Company.Product.WebApi.Services.UnitTests.PasswordHashingServiceTests;
 
 public sealed class WhenTestingPasswordAgainstHashedPassword
 {

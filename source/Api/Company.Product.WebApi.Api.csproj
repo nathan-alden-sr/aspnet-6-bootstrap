@@ -20,8 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common\Company.Product.WebApi.Common.csproj" />
-    <ProjectReference Include="..\Data\Company.Product.WebApi.Data.csproj" />
+    <ProjectReference Include="..\Services\Company.Product.WebApi.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

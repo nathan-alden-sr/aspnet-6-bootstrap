@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace Company.Product.WebApi.Api.Services.PasswordHashing;
+namespace Company.Product.WebApi.Services.PasswordHashing;
 
 public interface IPasswordHashingService
 {

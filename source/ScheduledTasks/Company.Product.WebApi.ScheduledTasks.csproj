@@ -19,8 +19,7 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.1" />
 
-    <ProjectReference Include="..\Common\Company.Product.WebApi.Common.csproj" />
-    <ProjectReference Include="..\Data\Company.Product.WebApi.Data.csproj" />
+    <ProjectReference Include="..\Services\Company.Product.WebApi.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

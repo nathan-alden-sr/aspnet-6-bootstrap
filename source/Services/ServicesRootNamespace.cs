@@ -1,4 +1,4 @@
-namespace Company.Product.WebApi.Api.Services;
+namespace Company.Product.WebApi.Services;
 
 // ReSharper disable once ConvertToStaticClass
 public sealed class ServicesRootNamespace

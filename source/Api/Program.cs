@@ -4,11 +4,12 @@ using System.Text.Json.Serialization;
 using Company.Product.WebApi.Api.ExceptionHandlers;
 using Company.Product.WebApi.Api.Filters.Validation;
 using Company.Product.WebApi.Api.Logging;
-using Company.Product.WebApi.Api.Services;
 using Company.Product.WebApi.Api.Swashbuckle;
 using Company.Product.WebApi.Common;
 using Company.Product.WebApi.Data;
+using Company.Product.WebApi.Services;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -18,9 +19,10 @@ using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
+// Roslyn incorrectly says the IDE0058 suppression is unnecessary
+#pragma warning disable IDE0079
 #pragma warning disable IDE0058
 
-var apiAssembly = Assembly.GetExecutingAssembly();
 var builder = WebApplication.CreateBuilder(args);
 
 /*
@@ -44,7 +46,7 @@ builder.Services.AddMemoryCache();
  */
 
 // No web server advertising allowed!
-builder.WebHost.ConfigureKestrel(a => a.AddServerHeader = false);
+builder.WebHost.ConfigureKestrel(options => options.AddServerHeader = false);
 
 /*
  * Registrations
@@ -63,7 +65,7 @@ builder
 // Automatically add all services in the Services namespace that have a matching concrete/interface type
 builder.Services.Scan(
     selector => selector
-        .FromAssemblyDependencies(apiAssembly)
+        .FromAssemblyOf<ServicesRootNamespace>()
         .AddClasses(
             filter => filter
                 .InNamespaceOf<ServicesRootNamespace>()
@@ -95,7 +97,7 @@ builder.Services.AddDbContextPool<DatabaseContext>(
 
 // System.Text.Json
 
-// JSON serializer options need to be available outside of an inside controllers
+// JSON serializer options need to be available both inside and outside of controllers
 
 static void ConfigureJsonSerializerOptions(JsonSerializerOptions options)
 {
@@ -113,9 +115,13 @@ builder.Services.Configure<JsonOptions>(options => ConfigureJsonSerializerOption
 builder.Services.AddFluentValidation(
     options =>
     {
-        options.RegisterValidatorsFromAssembly(apiAssembly);
+        options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         options.DisableDataAnnotationsValidation = true;
     });
+
+// Forms
+
+builder.Services.Configure<FormOptions>(options => options.MultipartBodyLengthLimit = 1_000_000);
 
 // Custom 400 responses
 builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
@@ -130,7 +136,7 @@ builder.Services
 // Swagger
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerExamplesFromAssemblies(apiAssembly);
+builder.Services.AddSwaggerExamplesFromAssemblies(Assembly.GetExecutingAssembly());
 builder.Services.AddSwaggerGen(
     options =>
     {

@@ -8,6 +8,9 @@ using NodaTime;
 using Quartz;
 using Serilog;
 
+
+// Roslyn incorrectly says the IDE0058 suppression is unnecessary
+#pragma warning disable IDE0079
 #pragma warning disable IDE0058
 
 var host =

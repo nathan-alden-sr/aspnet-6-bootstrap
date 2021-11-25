@@ -1,6 +1,6 @@
-# Bootstrapped ASP.NET Core 6 Web API Solution
+# Bootstrapped ASP.NET 6 Web API Solution
 
-This repository contains a bootstrapped ASP.NET Core 6 Web API solution.
+This repository contains a bootstrapped ASP.NET 6 Web API solution.
 
 ## Changes to make after cloning
 

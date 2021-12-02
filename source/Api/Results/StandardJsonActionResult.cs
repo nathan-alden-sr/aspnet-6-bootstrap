@@ -19,7 +19,7 @@ public class StandardJsonActionResult : ActionResult, IStandardJsonResult<Action
 
     protected sealed override async Task ExecuteResultInternalAsync(ActionContext context)
     {
-        ThrowIfNull(context, nameof(context));
+        ThrowIfNull(context);
 
         var jsonOptions = context.HttpContext.RequestServices.GetRequiredService<IOptions<JsonOptions>>();
 

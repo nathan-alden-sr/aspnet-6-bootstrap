@@ -18,7 +18,7 @@ public class StandardJsonHttpResult : HttpResult, IStandardJsonResult<HttpContex
 
     protected sealed override async Task ExecuteResultInternalAsync(HttpContext context)
     {
-        ThrowIfNull(context, nameof(context));
+        ThrowIfNull(context);
 
         var jsonOptions = context.RequestServices.GetRequiredService<IOptions<JsonOptions>>();
 

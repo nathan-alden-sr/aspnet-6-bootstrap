@@ -8,8 +8,8 @@ public sealed class TitleFilter : ISchemaFilter
 {
     public void Apply(OpenApiSchema schema, SchemaFilterContext context)
     {
-        ThrowIfNull(schema, nameof(schema));
-        ThrowIfNull(context, nameof(context));
+        ThrowIfNull(schema);
+        ThrowIfNull(context);
 
         var stringBuilder = new StringBuilder();
 

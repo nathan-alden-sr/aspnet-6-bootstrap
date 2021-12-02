@@ -11,7 +11,7 @@ public sealed class ContextWrapper<T>
 
     public ContextWrapper(T context)
     {
-        ThrowIfNull(context, nameof(context));
+        ThrowIfNull(context);
 
         if (typeof(T) == typeof(ActionContext))
         {

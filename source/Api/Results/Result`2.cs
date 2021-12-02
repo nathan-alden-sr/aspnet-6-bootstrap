@@ -42,7 +42,7 @@ public abstract class Result<TContext, TResult> : IResult<TContext>
 
     public TResult AddFormatter(Func<ContextWrapper<TContext>, Task> formatter)
     {
-        ThrowIfNull(formatter, nameof(formatter));
+        ThrowIfNull(formatter);
 
         Formatters.Add(formatter);
 

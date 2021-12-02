@@ -11,7 +11,7 @@ public class HttpResult : Result<HttpContext, HttpResult>
 
     public override async Task ExecuteResultAsync(ContextWrapper<HttpContext> context)
     {
-        ThrowIfNull(context, nameof(context));
+        ThrowIfNull(context);
 
         if (StatusCode is null)
         {
@@ -30,7 +30,7 @@ public class HttpResult : Result<HttpContext, HttpResult>
 
     public async Task ExecuteResultAsync(HttpContext context)
     {
-        ThrowIfNull(context, nameof(context));
+        ThrowIfNull(context);
 
         await ExecuteResultAsync(new ContextWrapper<HttpContext>(context));
     }

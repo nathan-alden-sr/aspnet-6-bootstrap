@@ -1,19 +1,13 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
 FROM mcr.microsoft.com/dotnet/runtime:6.0 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS publish
 WORKDIR /src
-COPY ["nuget.config", "."]
-COPY ["source/ScheduledTasks/Company.Product.WebApi.ScheduledTasks.csproj", "source/ScheduledTasks/"]
-RUN dotnet restore "source/ScheduledTasks/Company.Product.WebApi.ScheduledTasks.csproj"
-COPY . .
-WORKDIR "/src/source/ScheduledTasks"
-RUN dotnet build "Company.Product.WebApi.ScheduledTasks.csproj" -c Release -o /app/build
-
-FROM build AS publish
-RUN dotnet publish "Company.Product.WebApi.ScheduledTasks.csproj" -c Release -o /app/publish
+COPY [".editorconfig", "Directory.Build.*", "nuget.config", "."]
+COPY ["build/msbuild/", "build/msbuild/"]
+COPY ["source/", "source/"]
+WORKDIR /src/source/ScheduledTasks
+RUN dotnet publish "Company.Product.WebApi.ScheduledTasks.csproj" --configuration Release --output /app/publish
 
 FROM base AS final
 WORKDIR /app

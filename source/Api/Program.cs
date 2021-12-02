@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Company.Product.WebApi.Api;
 using Company.Product.WebApi.Api.ExceptionHandlers;
 using Company.Product.WebApi.Api.Filters.Validation;
 using Company.Product.WebApi.Api.Logging;
@@ -26,27 +27,37 @@ using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 var builder = WebApplication.CreateBuilder(args);
 
 /*
- * Logging
+ * Helper methods
  */
 
-builder.WebHost.UseSerilog(
-    (_, configuration) => configuration
-        .ReadFrom.Configuration(builder.Configuration)
-        .Enrich.With<UtcTimestampEnricher>(),
-    true);
+void ConfigureDbContext<T>(string connectionStringName)
+    where T : DbContext
+{
+    var connectionString =
+        builder.Configuration.GetConnectionString($"{builder.Environment.EnvironmentName}-{connectionStringName}");
+
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        ThrowInvalidOperationException($"A connection string named {connectionStringName} was not found.");
+    }
+
+    builder.Services.AddDbContextPool<T>(
+        options => options
+            .UseNpgsql(connectionString, optionsBuilder => optionsBuilder.UseNodaTime())
+            .UseSnakeCaseNamingConvention());
+}
+
+/*
+ * Secrets
+ */
+
+builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly());
 
 /*
  * Caching
  */
 
 builder.Services.AddMemoryCache();
-
-/*
- * Web host configuration
- */
-
-// No web server advertising allowed!
-builder.WebHost.ConfigureKestrel(options => options.AddServerHeader = false);
 
 /*
  * Registrations
@@ -77,19 +88,7 @@ builder.Services.Scan(
  * Entity Framework Core
  */
 
-const string connectionStringAlias = "company_product";
-var connectionString = builder.Configuration.GetConnectionString(connectionStringAlias);
-
-if (string.IsNullOrWhiteSpace(connectionString))
-{
-    ThrowInvalidOperationException(
-        $@"Connection string alias ""{connectionStringAlias}"" not found. Use ""dotnet user-secrets"" against this project to store the connection string securely.");
-}
-
-builder.Services.AddDbContextPool<DatabaseContext>(
-    options => options
-        .UseNpgsql(connectionString, optionsBuilder => optionsBuilder.UseNodaTime())
-        .UseSnakeCaseNamingConvention());
+ConfigureDbContext<DatabaseContext>("company-product");
 
 /*
  * ASP.NET
@@ -154,12 +153,28 @@ builder.Services.AddSwaggerGen(
     });
 
 /*
+ * Logging
+ */
+
+builder.WebHost.UseSerilog(
+    (_, configuration) => configuration
+        .ReadFrom.Configuration(builder.Configuration)
+        .Enrich.With<UtcTimestampEnricher>(),
+    true);
+
+/*
+ * Kestrel configuration
+ */
+
+builder.WebHost.ConfigureKestrel(options => options.AddServerHeader = false);
+
+/*
  * App
  */
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDeveloper())
 {
     app.UseSwagger();
     app.UseSwaggerUI(
@@ -169,15 +184,10 @@ if (app.Environment.IsDevelopment())
             options.DefaultModelExpandDepth(-1);
         });
 }
-else
-{
-    app.UseHsts();
-}
 
 // Custom 500 responses
 app.UseExceptionHandler(new ExceptionHandlerOptions { ExceptionHandler = UnhandledExceptionHandler.Handle });
 
-app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 

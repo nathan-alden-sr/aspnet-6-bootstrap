@@ -13,7 +13,7 @@ public sealed record EmailAddress
 
     public EmailAddress(string value)
     {
-        ThrowIfNull(value, nameof(value));
+        ThrowIfNull(value);
 
         if (!IsValid(value))
         {
@@ -44,7 +44,7 @@ public sealed record EmailAddress
 
     public static bool IsValid(string emailAddress)
     {
-        ThrowIfNull(emailAddress, nameof(emailAddress));
+        ThrowIfNull(emailAddress);
 
         return EmailAddressRegex.IsMatch(emailAddress);
     }

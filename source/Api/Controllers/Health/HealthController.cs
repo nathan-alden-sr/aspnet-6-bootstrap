@@ -18,8 +18,8 @@ public sealed class HealthController : ControllerBase
 
     public HealthController(IMemoryCache memoryCache, DatabaseContext databaseContext)
     {
-        ThrowIfNull(memoryCache, nameof(memoryCache));
-        ThrowIfNull(databaseContext, nameof(databaseContext));
+        ThrowIfNull(memoryCache);
+        ThrowIfNull(databaseContext);
 
         _memoryCache = memoryCache;
         _databaseContext = databaseContext;

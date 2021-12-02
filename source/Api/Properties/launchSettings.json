@@ -3,22 +3,14 @@
 
   "profiles": {
     "Api": {
+      "applicationUrl": "http://localhost:5000",
       "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
+      "dotnetRunMessages": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "DOTNET_ENVIRONMENT": "DeveloperVisualStudio"
       },
-      "applicationUrl": "https://localhost:7158;http://0.0.0.0:5158",
-      "dotnetRunMessages": true
-    },
-
-    "Docker": {
-      "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
-      "publishAllPorts": true,
-      "useSSL": true
+      "launchUrl": "swagger"
     }
   }
 }

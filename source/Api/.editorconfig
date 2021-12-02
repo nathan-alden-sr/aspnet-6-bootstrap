@@ -1,0 +1,5 @@
+root = false
+
+[*.cs]
+# Suppress warnings about unused cancellationToken parameters
+dotnet_diagnostic.IDE0060.severity = none

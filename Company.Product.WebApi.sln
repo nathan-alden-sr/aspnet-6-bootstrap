@@ -7,10 +7,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".root", ".root", "{2FE3A5FA
 	ProjectSection(SolutionItems) = preProject
 		.dockerignore = .dockerignore
 		.editorconfig = .editorconfig
+		.env = .env
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
+		docker-compose.yaml = docker-compose.yaml
 		LICENSE.md = LICENSE.md
 		nuget.config = nuget.config
 		README.md = README.md
@@ -57,13 +59,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Product.WebApi.Comm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Product.WebApi.Data.UnitTests", "tests\Data.UnitTests\Company.Product.WebApi.Data.UnitTests.csproj", "{9C88EC6D-6A4D-4E97-A7E7-7117C18C416A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{F1D6E519-2B94-4CC6-929F-1457395CE8F8}"
-	ProjectSection(SolutionItems) = preProject
-		scripts\dev\docker\create-network.ps1 = scripts\dev\docker\create-network.ps1
-		scripts\dev\docker\run-postgresql.ps1 = scripts\dev\docker\run-postgresql.ps1
-		scripts\dev\docker\run-seq.ps1 = scripts\dev\docker\run-seq.ps1
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "security", "security", "{8C26E21F-B068-4EE9-A886-82E863D8D93B}"
 	ProjectSection(SolutionItems) = preProject
 		scripts\dev\security\dotnet-devcerts.ps1 = scripts\dev\security\dotnet-devcerts.ps1
@@ -73,9 +68,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Product.WebApi.Sche
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Product.WebApi.ScheduledTasks.UnitTests", "tests\ScheduledTasks.UnitTests\Company.Product.WebApi.ScheduledTasks.UnitTests.csproj", "{ADD8A660-6830-47AD-B862-2516132EF4E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Company.Product.WebApi.Services", "source\Services\Company.Product.WebApi.Services.csproj", "{A07AC173-4BAA-4E3A-88C2-30E4518A26AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Product.WebApi.Services", "source\Services\Company.Product.WebApi.Services.csproj", "{A07AC173-4BAA-4E3A-88C2-30E4518A26AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Company.Product.WebApi.Services.UnitTests", "tests\Services.UnitTests\Company.Product.WebApi.Services.UnitTests.csproj", "{19B5F970-F49A-41E2-8382-5821A23F657A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Product.WebApi.Services.UnitTests", "tests\Services.UnitTests\Company.Product.WebApi.Services.UnitTests.csproj", "{19B5F970-F49A-41E2-8382-5821A23F657A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -137,7 +132,6 @@ Global
 		{F9DCC1F0-68A4-45EA-9310-A5EF5B2A0BD2} = {CEC726E3-F9B4-47C7-9610-5819DC21503F}
 		{41634309-DA54-4143-93E3-1692DCD0CF0B} = {511308EF-EBF4-4636-8A88-D6BD9E737FCC}
 		{9C88EC6D-6A4D-4E97-A7E7-7117C18C416A} = {511308EF-EBF4-4636-8A88-D6BD9E737FCC}
-		{F1D6E519-2B94-4CC6-929F-1457395CE8F8} = {CEC726E3-F9B4-47C7-9610-5819DC21503F}
 		{8C26E21F-B068-4EE9-A886-82E863D8D93B} = {CEC726E3-F9B4-47C7-9610-5819DC21503F}
 		{7E997562-BD67-42E6-A73F-BD21C57B043C} = {7F73C65B-2171-4AF7-91D8-40EAB7425604}
 		{ADD8A660-6830-47AD-B862-2516132EF4E6} = {511308EF-EBF4-4636-8A88-D6BD9E737FCC}

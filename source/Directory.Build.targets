@@ -3,7 +3,7 @@
   <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.targets" />
 
   <ItemGroup>
-    <PackageReference Update="TerraFX" Version="0.1.0-alpha.1414738047" />
+    <PackageReference Update="TerraFX" Version="0.1.0-alpha.1511433912" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Release'">

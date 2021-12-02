@@ -11,8 +11,8 @@ public sealed class SampleJob : IJob
 
     public SampleJob(ILogger<SampleJob> logger, DatabaseContext databaseContext)
     {
-        ThrowIfNull(logger, nameof(logger));
-        ThrowIfNull(databaseContext, nameof(databaseContext));
+        ThrowIfNull(logger);
+        ThrowIfNull(databaseContext);
 
         _logger = logger;
         _databaseContext = databaseContext;

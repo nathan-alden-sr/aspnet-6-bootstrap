@@ -8,21 +8,42 @@ using NodaTime;
 using Quartz;
 using Serilog;
 
-
 // Roslyn incorrectly says the IDE0058 suppression is unnecessary
 #pragma warning disable IDE0079
 #pragma warning disable IDE0058
 
 var host =
     Host.CreateDefaultBuilder(args)
-        .ConfigureHostConfiguration(
-            builder => builder
+        .ConfigureAppConfiguration(
+            (context, builder) => builder
                 .AddUserSecrets<Worker>()
                 .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")}.json", false, true))
+                .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", false, true))
         .ConfigureServices(
             (context, services) =>
             {
+                /*
+                 * Helper methods
+                 */
+
+                void ConfigureDbContext<T>(string connectionStringName)
+                    where T : DbContext
+                {
+                    var connectionString =
+                        context.Configuration.GetConnectionString(
+                            $"{context.HostingEnvironment.EnvironmentName}-{connectionStringName}");
+
+                    if (string.IsNullOrEmpty(connectionString))
+                    {
+                        ThrowInvalidOperationException($"A connection string named {connectionStringName} was not found.");
+                    }
+
+                    services.AddDbContextPool<T>(
+                        options => options
+                            .UseNpgsql(connectionString, optionsBuilder => optionsBuilder.UseNodaTime())
+                            .UseSnakeCaseNamingConvention());
+                }
+
                 /*
                  * General purpose
                  */
@@ -36,19 +57,7 @@ var host =
                  * Entity Framework Core
                  */
 
-                const string connectionStringAlias = "company_product";
-                var connectionString = context.Configuration.GetConnectionString(connectionStringAlias);
-
-                if (string.IsNullOrWhiteSpace(connectionString))
-                {
-                    ThrowInvalidOperationException(
-                        $@"Connection string alias ""{connectionStringAlias}"" not found. Use ""dotnet user-secrets"" against this project to store the connection string securely.");
-                }
-
-                services.AddDbContextPool<DatabaseContext>(
-                    options => options
-                        .UseNpgsql(connectionString, optionsBuilder => optionsBuilder.UseNodaTime())
-                        .UseSnakeCaseNamingConvention());
+                ConfigureDbContext<DatabaseContext>("company-product");
 
                 /*
                  * Quartz.NET

@@ -11,7 +11,7 @@ public sealed partial class ClockSnapshot : IClockSnapshot
 
     public ClockSnapshot(IClock clock)
     {
-        ThrowIfNull(clock, nameof(clock));
+        ThrowIfNull(clock);
 
         _instant = clock.GetCurrentInstant();
     }

@@ -7,7 +7,7 @@ public static class UnhandledExceptionHandler
 {
     public static async Task Handle(HttpContext context)
     {
-        ThrowIfNull(context, nameof(context));
+        ThrowIfNull(context);
 
         var hostEnvironment = context.RequestServices.GetRequiredService<IHostEnvironment>();
         var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
@@ -26,7 +26,7 @@ public static class UnhandledExceptionHandler
             HttpResult
                 .InternalServerError()
                 .AsStandardJson(
-                    hostEnvironment.IsDevelopment()
+                    hostEnvironment.IsDeveloper()
                         ? CreateUnhandledExceptionResponse(exceptionHandlerFeature.Error)
                         : null,
                     "An unhandled exception has occurred.");

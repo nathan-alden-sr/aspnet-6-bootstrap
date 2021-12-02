@@ -13,14 +13,14 @@ public class ActionResult : Result<ActionContext, ActionResult>, IActionResult
 
     public async Task ExecuteResultAsync(ActionContext context)
     {
-        ThrowIfNull(context, nameof(context));
+        ThrowIfNull(context);
 
         await ExecuteResultAsync(new ContextWrapper<ActionContext>(context));
     }
 
     public override async Task ExecuteResultAsync(ContextWrapper<ActionContext> context)
     {
-        ThrowIfNull(context, nameof(context));
+        ThrowIfNull(context);
 
         if (StatusCode is null)
         {
@@ -83,7 +83,7 @@ public class ActionResult : Result<ActionContext, ActionResult>, IActionResult
             .AddFormatter(
                 context =>
                 {
-                    ThrowIfNull(context, nameof(context));
+                    ThrowIfNull(context);
 
                     var urlHelper =
                         context.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context.Context);
@@ -139,7 +139,7 @@ public class ActionResult : Result<ActionContext, ActionResult>, IActionResult
             .AddFormatter(
                 context =>
                 {
-                    ThrowIfNull(context, nameof(context));
+                    ThrowIfNull(context);
 
                     var urlHelper =
                         context.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context.Context);
@@ -198,7 +198,7 @@ public class ActionResult : Result<ActionContext, ActionResult>, IActionResult
             .AddFormatter(
                 context =>
                 {
-                    ThrowIfNull(context, nameof(context));
+                    ThrowIfNull(context);
 
                     var urlHelper =
                         context.RequestServices.GetRequiredService<IUrlHelperFactory>().GetUrlHelper(context.Context);

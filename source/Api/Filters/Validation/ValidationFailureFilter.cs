@@ -19,7 +19,7 @@ public class ValidationFailureFilter : IActionFilter
                 .SelectMany(a => a.Errors)
                 .Select(
                     a =>
-                        hostEnvironment.IsDevelopment()
+                        hostEnvironment.IsDeveloper()
                             ? new ValidationFailureWithExceptionsResultData(a.ErrorMessage, a.Exception)
                             : new ValidationFailureResultData(a.ErrorMessage));
 

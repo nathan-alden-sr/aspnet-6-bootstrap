@@ -22,15 +22,16 @@ Be sure to make the following changes once you clone the repository:
 
 The solution is opinionated about several things. It's important to understand the purpose of each class before using the solution.
 
-## Before running the API application
+## Before running applications
 
-You must do a few things before successfully running the API application:
+Things to do before running the applications:
 
-- Run the `create-network.ps1` script (see [Scripts](#scripts))
-- Run the `run-postgresql.ps1` script (see [Scripts](#scripts))
-- Run the `run-seq.ps1` script (see [Scripts](#scripts))
-- Run the `add-postgresql-connection-string.ps1` script (see [Scripts](#scripts))
-  - Be sure to run the script twice: once with `-Project Api` and once with `-Project ScheduledTasks`
+- Run the `set-postgresql-connection-strings.ps1` script. Here is the recommended PowerShell:
+
+  ```ps
+  .\scripts\dev\secrets\set-postgresql-connection-strings.ps1 -Environment DeveloperDocker -DatabaseHost postgresql -DatabaseName postgres -Verbose
+  .\scripts\dev\secrets\set-postgresql-connection-strings.ps1 -Environment DeveloperVisualStudio -DatabaseHost localhost -DatabaseName postgres -Verbose
+  ```
 
 ## Notable features
 
@@ -72,16 +73,6 @@ Seq is an excellent log sink. Both the `Api` and `ScheduledTasks` projects are c
 | [Swashbuckle](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-6.0&tabs=visual-studio) | [OpenAPI](https://swagger.io/) documentation |
 | [TerraFX](https://github.com/terrafx/terrafx) | Utilities |
 | [xUnit](https://xunit.net/) | Test harness |
-
-## Scripts
-
-| Script | Purpose |
-| ------ | ------- |
-| `/scripts/dev/docker/create-network.ps1` | Creates a Docker network |
-| `/scripts/dev/docker/run-postgresql.ps1` | Runs a PostgreSQL Docker container |
-| `/scripts/dev/docker/run-seq.ps1` | Runs a Seq SQL Docker container |
-| `/scripts/dev/secrets/add-postgresql-connection-string.ps1` | Adds a PostgreSQL connection string using `dotnet user-secrets` |
-| `/scripts/dev/security/dotnet-devcerts.ps1` | .NET HTTPS development certificate management |
 
 ## Versioning
 

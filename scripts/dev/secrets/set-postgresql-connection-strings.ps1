@@ -41,12 +41,12 @@ param(
     [Parameter(Mandatory)]
     [ValidateSet("DeveloperDocker", "DeveloperVisualStudio")]
     [string] $Environment,
-    [string] $Name = "company-product",
+    [string] $Name,
     [string] $Configuration = "Debug",
-    [string] $DatabaseHost = "localhost",
+    [string] $DatabaseHost,
     [ushort] $DatabasePort = 5432,
-    [string] $DatabaseUser = $Name,
-    [string] $DatabasePassword = $Name,
+    [string] $DatabaseUser = "company_product",
+    [string] $DatabasePassword = "company_product",
     [string] $DatabaseName = $Name,
     [int] $CommandTimeoutInSeconds = 600,
     [int] $TimeoutInSeconds = 15,
@@ -58,10 +58,10 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 foreach ($project in $Projects) {
-    $projectDirectory = Join-Path $PSScriptRoot .. .. .. source $project -Resolve
-    $isVerbose = $PSBoundParameters["Verbose"] -eq $true -or $VerbosePreference -eq "Continue"
+    [string] $projectDirectory = Join-Path $PSScriptRoot .. .. .. source $project -Resolve
+    [bool] $isVerbose = $PSBoundParameters["Verbose"] -eq $true -or $VerbosePreference -eq "Continue"
 
-    $arguments = @(
+    [string[]] $arguments = @(
         "user-secrets",
         "set",
         "ConnectionStrings:$Environment-$Name",

@@ -57,7 +57,7 @@ var host =
                  * Entity Framework Core
                  */
 
-                ConfigureDbContext<DatabaseContext>("company-product");
+                ConfigureDbContext<DatabaseContext>("company_product");
 
                 /*
                  * Quartz.NET

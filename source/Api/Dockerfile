@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS publish
 WORKDIR /src
-COPY [".editorconfig", "Directory.Build.*", "nuget.config", "."]
+COPY [".editorconfig", "Directory.Build.*", "nuget.config", "./"]
 COPY ["build/msbuild/", "build/msbuild/"]
 COPY ["source/", "source/"]
 WORKDIR /src/source/Api

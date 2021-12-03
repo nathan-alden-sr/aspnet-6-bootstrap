@@ -33,8 +33,9 @@ var builder = WebApplication.CreateBuilder(args);
 void ConfigureDbContext<T>(string connectionStringName)
     where T : DbContext
 {
-    var connectionString =
-        builder.Configuration.GetConnectionString($"{builder.Environment.EnvironmentName}-{connectionStringName}");
+    connectionStringName = $"{builder.Environment.EnvironmentName}-{connectionStringName}";
+
+    var connectionString = builder.Configuration.GetConnectionString(connectionStringName);
 
     if (string.IsNullOrEmpty(connectionString))
     {

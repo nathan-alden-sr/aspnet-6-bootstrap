@@ -29,9 +29,9 @@ var host =
                 void ConfigureDbContext<T>(string connectionStringName)
                     where T : DbContext
                 {
-                    var connectionString =
-                        context.Configuration.GetConnectionString(
-                            $"{context.HostingEnvironment.EnvironmentName}-{connectionStringName}");
+                    connectionStringName = $"{context.HostingEnvironment.EnvironmentName}-{connectionStringName}";
+
+                    var connectionString = context.Configuration.GetConnectionString(connectionStringName);
 
                     if (string.IsNullOrEmpty(connectionString))
                     {

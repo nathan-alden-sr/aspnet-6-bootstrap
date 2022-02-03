@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <UserSecretsId></UserSecretsId>
+    <UserSecretsId>0cc21ec2-c168-4325-8c42-916936f3b7b1</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
-    <PackageReference Include="Serilog.Sinks.Seq" Version="5.1.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.1.1" />
 
     <ProjectReference Include="..\Services\Company.Product.WebApi.Services.csproj" />
   </ItemGroup>
